@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth overflow-x-hidden">
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-black text-white font-sans overflow-x-hidden min-h-screen flex flex-col`}>
         <main className="flex-1 flex flex-col relative">
           {children}

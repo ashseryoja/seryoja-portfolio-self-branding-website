@@ -51,7 +51,7 @@ export default function Home() {
           <h2 className="font-mono text-sm tracking-[0.3em] uppercase opacity-70 mb-4 animate-pulse">
             Junior Full Stack Web Developer & Low Code AI Automation Architect
           </h2>
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] hover:animate-glitch transition-all cursor-default">
+          <h1 className="text-[12vw] sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] hover:animate-glitch transition-all cursor-default break-words">
             SERGEY<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-600">ASHUGHYAN</span>
           </h1>
