@@ -162,7 +162,7 @@ export default function ProfileModal() {
                                         <div className="w-full max-w-2xl h-64 border border-white/20 rounded-xl overflow-hidden bg-white/5 relative group">
                                             <div className="absolute inset-0 bg-transparent z-10 pointer-events-none group-focus-within:bg-transparent"></div>
                                             <iframe
-                                                src="https://wayou.github.io/t-rex-runner/"
+                                                src="/dino/index.html"
                                                 className="w-full h-full opacity-80 mix-blend-screen"
                                                 style={{ filter: "invert(1) hue-rotate(180deg) contrast(1.2)" }}
                                                 title="Dino Game"
