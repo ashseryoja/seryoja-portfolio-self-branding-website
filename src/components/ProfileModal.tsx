@@ -17,24 +17,72 @@ export default function ProfileModal() {
     return (
         <>
             <AnimatePresence>
-                {/* Profile Trigger Button */}
+                {/* Profile Trigger Button & Callout Container */}
                 {!isOpen && (
-                    <motion.button
-                        layoutId="profile-container"
-                        onClick={() => setIsOpen(true)}
-                        className="fixed top-6 left-6 z-50 w-12 h-12 rounded-full overflow-hidden border-2 border-white/20 hover:border-white transition-colors group bg-black"
-                        style={{ borderRadius: 9999 }}
-                    >
-                        <motion.div layoutId="profile-image" className="w-full h-full relative" style={{ borderRadius: 9999 }}>
-                            <Image
-                                src="/assets/profile.webp"
-                                alt="Sergey Ashughyan"
-                                fill
-                                sizes="48px"
-                                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    <div className="fixed top-6 left-6 z-50 flex items-center gap-4">
+                        <motion.button
+                            onClick={() => setIsOpen(true)}
+                            className="relative w-12 h-12 rounded-full hover:border-white transition-colors group bg-black shrink-0"
+                            style={{ borderRadius: 9999 }}
+                        >
+                            {/* 8-second Intro Pulse Animation using Framer Motion */}
+                            <motion.div
+                                initial={{ scale: 1, opacity: 0.8 }}
+                                animate={{ scale: 1.8, opacity: 0 }}
+                                transition={{ duration: 2, repeat: 3, ease: "easeOut" }}
+                                className="absolute inset-0 rounded-full border-[1.5px] border-white pointer-events-none"
                             />
+
+                            {/* Static Border */}
+                            <div className="absolute inset-0 rounded-full border-[2px] border-white/20 group-hover:border-white transition-colors z-10 pointer-events-none"></div>
+
+                            <motion.div className="w-full h-full relative z-0 overflow-hidden" style={{ borderRadius: 9999 }}>
+                                <Image
+                                    src="/assets/profile.webp"
+                                    alt="Sergey Ashughyan"
+                                    fill
+                                    sizes="48px"
+                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                />
+                            </motion.div>
+                        </motion.button>
+
+                        {/* Animated 'Click Here' SVG + Text */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.5, delay: 0.5 }}
+                            className="flex items-center gap-2 pointer-events-none"
+                        >
+                            <svg
+                                width="32"
+                                height="32"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-white relative top-[2px]"
+                                style={{
+                                    animation: "bounce-horizontal 1.5s infinite"
+                                }}
+                            >
+                                <style>
+                                    {`
+                                        @keyframes bounce-horizontal {
+                                            0%, 100% { transform: translateX(0); }
+                                            50% { transform: translateX(-25%); }
+                                        }
+                                    `}
+                                </style>
+                                <path d="M19 12H5M5 12L12 19M5 12L12 5" />
+                            </svg>
+                            <span className="font-mono text-[10px] sm:text-xs font-bold text-white uppercase tracking-widest whitespace-nowrap overflow-hidden">
+                                Click Here
+                            </span>
                         </motion.div>
-                    </motion.button>
+                    </div>
                 )}
             </AnimatePresence>
 
@@ -53,13 +101,16 @@ export default function ProfileModal() {
 
                         {/* Modal Container */}
                         <motion.div
-                            layoutId="profile-container"
-                            className="relative w-full max-w-sm bg-black border border-white/20 p-8 flex flex-col items-center z-10 overflow-hidden cursor-default"
+                            initial={{ scale: 0.8, opacity: 0 }}
                             animate={{
+                                scale: 1,
+                                opacity: 1,
                                 maxWidth: view === 'dino' ? '48rem' : '24rem',
                                 minHeight: view === 'dino' ? '500px' : 'auto',
                             }}
+                            exit={{ scale: 0.8, opacity: 0 }}
                             transition={{ duration: 0.4, ease: "easeInOut" }}
+                            className="relative w-full max-w-sm bg-black border border-white/20 p-8 flex flex-col items-center z-10 overflow-hidden cursor-default"
                             style={{ borderRadius: 24 }}
                         >
 
