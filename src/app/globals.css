@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #000000;
+    --foreground: #ffffff;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-inter), sans-serif;
+}
+
+/* Custom Selection Color */
+::selection {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Scrollbar styles to match Noir theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+
+/* Base interactive transitions */
+.invert-hover {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.invert-hover:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
