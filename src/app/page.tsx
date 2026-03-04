@@ -131,7 +131,7 @@ export default function Home() {
                   />
                 </div>
                 <p className="text-neutral-300 font-light leading-relaxed border-l-2 border-white/20 pl-4 py-1 italic">
-                  "A modern Progressive Web Application for a furniture brand — fast, installable, offline-ready, with a premium tablet-optimized UI and seamless SPA experience, delivering a native-app experience directly in the browser."
+                  &quot;A modern Progressive Web Application for a furniture brand — fast, installable, offline-ready, with a premium tablet-optimized UI and seamless SPA experience, delivering a native-app experience directly in the browser.&quot;
                 </p>
               </div>
             </div>
