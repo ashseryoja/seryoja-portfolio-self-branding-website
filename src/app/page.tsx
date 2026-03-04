@@ -7,7 +7,6 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { GraduationCap } from "lucide-react";
-import ContactButton from "@/components/ContactButton";
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -180,7 +179,6 @@ export default function Home() {
         </section>
 
       </div>
-      <ContactButton />
     </div>
   );
 }
