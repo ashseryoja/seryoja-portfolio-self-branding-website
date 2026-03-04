@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import SocialDock from "@/components/SocialDock";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
@@ -50,7 +49,6 @@ export default function RootLayout({
         <main className="flex-1 flex flex-col relative">
           {children}
         </main>
-        <SocialDock />
       </body>
     </html>
   );
