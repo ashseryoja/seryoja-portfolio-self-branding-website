@@ -50,8 +50,12 @@ export default function ProfileModal() {
                         {/* Animated 'Click Here' SVG + Text */}
                         <motion.div
                             initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.5, delay: 0.5 }}
+                            animate={{ opacity: [0, 1, 1, 0], x: [-10, 0, 0, 0] }}
+                            transition={{
+                                duration: 8,
+                                times: [0, 0.05, 0.95, 1], // Fades in quickly, stays for 7+ seconds, fades out at the end of 8s
+                                ease: "easeInOut"
+                            }}
                             className="flex items-center gap-2 pointer-events-none"
                         >
                             <svg
