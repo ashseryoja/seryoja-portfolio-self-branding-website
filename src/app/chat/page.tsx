@@ -30,27 +30,7 @@ export default function ChatPage() {
         scrollToBottom();
     }, [messages, isLoading]);
 
-    // Lock body scroll on mount to prevent iOS Safari from pushing the fixed header off-screen when keyboard opens
-    useEffect(() => {
-        // Save original body styles to restore them when navigating away
-        const originalStyle = window.getComputedStyle(document.body).overflow;
-        const originalPosition = window.getComputedStyle(document.body).position;
-        const originalWidth = window.getComputedStyle(document.body).width;
-        const originalHeight = window.getComputedStyle(document.body).height;
-
-        // Apply strict lock
-        document.body.style.overflow = "hidden";
-        document.body.style.position = "fixed";
-        document.body.style.width = "100%";
-        document.body.style.height = "100%";
-
-        return () => {
-            document.body.style.overflow = originalStyle;
-            document.body.style.position = originalPosition;
-            document.body.style.width = originalWidth;
-            document.body.style.height = originalHeight;
-        };
-    }, []);
+    // Native Flexbox + dvh handles iOS keyboard properly.
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -112,12 +92,12 @@ export default function ChatPage() {
     };
 
     return (
-        <div className="fixed inset-0 flex flex-col bg-black text-white overflow-hidden pb-24 lg:pb-0 z-50">
+        <div className="fixed top-0 left-0 w-full h-[100dvh] flex flex-col bg-black text-white overflow-hidden z-[40]">
             {/* Background Texture */}
             <div className="absolute inset-0 bg-[#000000] bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none z-0" />
 
             {/* Header */}
-            <header className="relative z-10 flex items-center justify-center px-6 h-24 border-b border-white/10 bg-black/50 backdrop-blur-md">
+            <header className="shrink-0 relative z-10 flex items-center justify-center px-6 h-24 border-b border-white/10 bg-black/50 backdrop-blur-md">
                 <div className="flex items-center gap-3 md:ml-0">
                     <div className="p-2 bg-white/5 rounded-lg border border-white/10">
                         <Terminal size={18} className="text-white/70" />
@@ -133,7 +113,7 @@ export default function ChatPage() {
             </header>
 
             {/* Chat Area */}
-            <div className="flex-1 overflow-y-auto relative z-10 p-4 sm:p-6 pb-[140px] lg:pb-[140px] space-y-6 scroll-smooth">
+            <div className="flex-1 overflow-y-auto relative z-10 p-4 sm:p-6 space-y-6 scroll-smooth">
                 <div className="max-w-3xl mx-auto space-y-6">
                     <AnimatePresence initial={false}>
                         {messages.map((m) => (
@@ -195,7 +175,7 @@ export default function ChatPage() {
             </div>
 
             {/* Input Dock */}
-            <div className="absolute bottom-24 lg:bottom-16 left-0 right-0 z-10 p-4 pb-6 lg:pb-8 bg-gradient-to-t from-black via-black to-transparent">
+            <div className="shrink-0 relative z-10 p-4 pb-28 lg:pb-8 bg-gradient-to-t from-black via-black to-transparent">
                 <form
                     onSubmit={handleSubmit}
                     className="max-w-3xl mx-auto relative flex items-center"
