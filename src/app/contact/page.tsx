@@ -60,7 +60,7 @@ export default function ContactPage() {
 
                 {/* Contact Links */}
                 <div className="w-full flex flex-col gap-4">
-                    {contacts.map((contact, i) => (
+                    {contacts.map((contact) => (
                         <a
                             key={contact.name}
                             href={contact.href}

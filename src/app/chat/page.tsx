@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Terminal } from "lucide-react";
-import Image from "next/image";
 
 type Message = {
     id: string;

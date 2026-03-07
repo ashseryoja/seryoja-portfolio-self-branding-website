@@ -7,7 +7,7 @@ export async function POST(request: Request) {
 
         const payloadToN8n = {
             chatInput: body.message || body.chatInput || "",
-            sessionId: body.sessionId || "seryoja_portfolio_session" 
+            sessionId: body.sessionId || "seryoja_portfolio_session"
         };
 
         const response = await fetch(n8nWebhookUrl, {
@@ -21,11 +21,11 @@ export async function POST(request: Request) {
         }
 
         const data = await response.json();
-        
+
         // n8n может вернуть либо объект, либо массив объектов.
         // Нам нужно вытащить текст из поля 'output' и отдать его как 'reply'.
         let rawContent = "";
-        
+
         if (Array.isArray(data)) {
             rawContent = data[0]?.output || data[0]?.reply || "Ответ не найден в массиве";
         } else {
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
         // ВАЖНО: Твой фронтенд ждет именно ключ "reply"
         return NextResponse.json({ reply: rawContent });
 
-    } catch (error: any) {
+    } catch (error) {
         console.error("API Error:", error);
         return NextResponse.json({ reply: "Внутренняя ошибка сервера Next.js" }, { status: 500 });
     }
