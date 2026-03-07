@@ -238,7 +238,7 @@ export default function ChatPage() {
             </div>
 
             {/* Input Dock */}
-            <div className="shrink-0 relative z-10 p-4 pb-28 lg:pb-8 bg-gradient-to-t from-black via-black to-transparent">
+            <div className="shrink-0 relative z-10 p-4 pb-28 lg:pb-24 bg-gradient-to-t from-black via-black to-transparent">
                 <form
                     onSubmit={handleSubmit}
                     className="max-w-3xl mx-auto relative flex items-center"
