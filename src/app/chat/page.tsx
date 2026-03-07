@@ -30,6 +30,28 @@ export default function ChatPage() {
         scrollToBottom();
     }, [messages, isLoading]);
 
+    // Lock body scroll on mount to prevent iOS Safari from pushing the fixed header off-screen when keyboard opens
+    useEffect(() => {
+        // Save original body styles to restore them when navigating away
+        const originalStyle = window.getComputedStyle(document.body).overflow;
+        const originalPosition = window.getComputedStyle(document.body).position;
+        const originalWidth = window.getComputedStyle(document.body).width;
+        const originalHeight = window.getComputedStyle(document.body).height;
+
+        // Apply strict lock
+        document.body.style.overflow = "hidden";
+        document.body.style.position = "fixed";
+        document.body.style.width = "100%";
+        document.body.style.height = "100%";
+
+        return () => {
+            document.body.style.overflow = originalStyle;
+            document.body.style.position = originalPosition;
+            document.body.style.width = originalWidth;
+            document.body.style.height = originalHeight;
+        };
+    }, []);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || isLoading) return;
