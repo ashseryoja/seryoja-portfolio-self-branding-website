@@ -61,6 +61,33 @@ export default function ChatPage() {
             window.removeEventListener("scroll", updateLayout);
         };
     }, []);
+
+    // Strict iOS Safari background scroll and pan prevention
+    useEffect(() => {
+        const preventPan = (e: TouchEvent) => {
+            const scrollArea = document.getElementById("chat-scroll-area");
+            // If dragging inside the chat area, allow normal scroll
+            if (scrollArea && scrollArea.contains(e.target as Node)) {
+                return;
+            }
+            // Otherwise, prevent dragging the background/layout viewport
+            if (e.cancelable) {
+                e.preventDefault();
+            }
+        };
+
+        // Use passive: false to allow preventDefault to work
+        document.addEventListener("touchmove", preventPan, { passive: false });
+        // Also strictly lock the HTML/Body tags globally just in case
+        document.documentElement.classList.add("overflow-hidden");
+        document.body.classList.add("overflow-hidden");
+
+        return () => {
+            document.removeEventListener("touchmove", preventPan);
+            document.documentElement.classList.remove("overflow-hidden");
+            document.body.classList.remove("overflow-hidden");
+        };
+    }, []);
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || isLoading) return;
@@ -146,7 +173,10 @@ export default function ChatPage() {
             </header>
 
             {/* Chat Area */}
-            <div className="flex-1 overflow-y-auto relative z-10 p-4 sm:p-6 space-y-6 scroll-smooth">
+            <div
+                id="chat-scroll-area"
+                className="flex-1 overflow-y-auto overscroll-none relative z-10 p-4 sm:p-6 space-y-6 scroll-smooth"
+            >
                 <div className="max-w-3xl mx-auto space-y-6">
                     <AnimatePresence initial={false}>
                         {messages.map((m) => (
