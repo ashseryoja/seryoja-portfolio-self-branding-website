@@ -30,8 +30,37 @@ export default function ChatPage() {
         scrollToBottom();
     }, [messages, isLoading]);
 
-    // Native Flexbox + dvh handles iOS keyboard properly.
+    const containerRef = useRef<HTMLDivElement>(null);
 
+    // Dynamic visualViewport tracking to counter-act iOS Safari panning the fixed header off-screen
+    useEffect(() => {
+        if (!window.visualViewport) return;
+
+        const vp = window.visualViewport;
+        const updateLayout = () => {
+            if (containerRef.current) {
+                // OffsetTop measures how far Safari panned the layout viewport up
+                // We set 'top' to this exact offset to lock it to the visible screen edge
+                containerRef.current.style.top = `${vp.offsetTop}px`;
+                containerRef.current.style.height = `${vp.height}px`;
+            }
+            // Ensure messages are scrolled to bottom as view shrinks
+            setTimeout(scrollToBottom, 50);
+        };
+
+        vp.addEventListener("resize", updateLayout);
+        vp.addEventListener("scroll", updateLayout);
+        window.addEventListener("scroll", updateLayout);
+
+        // Initial layout calculation
+        updateLayout();
+
+        return () => {
+            vp.removeEventListener("resize", updateLayout);
+            vp.removeEventListener("scroll", updateLayout);
+            window.removeEventListener("scroll", updateLayout);
+        };
+    }, []);
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || isLoading) return;
@@ -92,7 +121,11 @@ export default function ChatPage() {
     };
 
     return (
-        <div className="fixed top-0 left-0 w-full h-[100dvh] flex flex-col bg-black text-white overflow-hidden z-[40]">
+        <div
+            ref={containerRef}
+            className="fixed left-0 w-full flex flex-col bg-black text-white overflow-hidden z-[40]"
+            style={{ height: "100dvh", top: 0 }}
+        >
             {/* Background Texture */}
             <div className="absolute inset-0 bg-[#000000] bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none z-0" />
 
