@@ -173,7 +173,7 @@ export default function ChatPage() {
             </div>
 
             {/* Input Dock */}
-            <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-28 lg:pb-28 bg-gradient-to-t from-black via-black to-transparent">
+            <div className="absolute bottom-0 left-0 right-0 z-10 p-4 pb-6 lg:pb-28 bg-gradient-to-t from-black via-black to-transparent">
                 <form
                     onSubmit={handleSubmit}
                     className="max-w-3xl mx-auto relative flex items-center"
