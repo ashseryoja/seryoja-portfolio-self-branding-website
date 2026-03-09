@@ -56,7 +56,7 @@ export default function Home() {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-600">ASHUGHYAN</span>
           </h1>
           <p className="max-w-2xl text-xl font-light leading-relaxed text-neutral-400">
-            I engineer high-performance web applications and design intelligent <span className="text-white font-mono bg-white/10 px-2 py-1 rounded">n8n</span> automation flows. Welcome to the engine room.
+            I build AI agents and automation systems with <span className="text-white font-mono bg-white/10 px-2 py-1 rounded">n8n</span>, along with high-performance web applications.
           </p>
         </section>
 
