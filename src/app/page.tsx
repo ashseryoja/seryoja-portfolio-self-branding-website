@@ -55,9 +55,18 @@ export default function Home() {
             SERGEY<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-600">ASHUGHYAN</span>
           </h1>
-          <p className="max-w-2xl text-xl font-light leading-relaxed text-neutral-400">
+          <p className="max-w-2xl text-xl font-light leading-relaxed text-neutral-400 mb-8">
             I build AI agents and automation systems with <span className="text-white font-mono bg-white/10 px-2 py-1 rounded">n8n</span>, along with high-performance web applications.
           </p>
+          <div className="flex items-center gap-4">
+            <a
+              href="/cv/Document.png"
+              download="Sergey_Ashughyan_CV.png"
+              className="inline-flex items-center justify-center px-6 py-3 border border-white/20 bg-white/5 hover:bg-white hover:text-black font-mono text-sm uppercase tracking-wider transition-all duration-300 w-fit"
+            >
+              Download CV
+            </a>
+          </div>
         </section>
 
         {/* SKILLS GRID */}
