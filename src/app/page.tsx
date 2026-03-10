@@ -44,10 +44,10 @@ export default function Home() {
       <NetworkBackground />
 
       {/* Content Overlay */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-32 pb-48 selection:bg-white selection:text-black">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-16 md:pt-32 pb-48 selection:bg-white selection:text-black">
 
         {/* HERO SECTION */}
-        <section className="min-h-[80vh] flex flex-col justify-center reveal-section">
+        <section className="min-h-[65vh] md:min-h-[80vh] flex flex-col justify-center reveal-section">
           <h2 className="font-mono text-sm tracking-[0.3em] uppercase opacity-70 mb-4 animate-pulse">
             Junior Full Stack Web Developer & Low Code AI Automation Architect
           </h2>
