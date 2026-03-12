@@ -111,6 +111,44 @@ export default function Home() {
           </div>
 
           <div className="space-y-24">
+            {/* Experience 0: AI & Automation */}
+            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
+              <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
+                <h4 className="text-3xl font-bold font-mono">Ai automation low code engineer</h4>
+                <p className="text-neutral-500 font-mono mt-1 mb-4">n8n automations</p>
+                <div className="mt-6 border border-white/10 rounded-lg overflow-hidden relative group/img bg-white/5 w-full max-w-sm">
+                  <Image
+                    src="/log/n8n.jpg"
+                    alt="n8n AI Automation Workflows"
+                    width={1200}
+                    height={800}
+                    className="w-full h-auto object-cover group-hover/img:scale-105 transition-all duration-700"
+                  />
+                </div>
+              </div>
+              <div className="relative pl-12 md:pl-0">
+                <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
+                <h5 className="font-bold font-mono text-lg mb-2">AI & Automation</h5>
+                <p className="font-mono text-white/70 mb-2">Core Focus</p>
+                <p className="text-neutral-300 font-light leading-relaxed mb-6">
+                  I build AI-driven automation systems (n8n, OpenAI, APIs) to streamline operations and eliminate manual work.
+                </p>
+
+                <h5 className="font-bold font-mono text-lg mb-2">Featured Projects</h5>
+                <ul className="space-y-4 text-neutral-300 font-light leading-relaxed mb-6">
+                  <li className="flex gap-2">
+                    <span className="text-white/50">•</span>
+                    <span><strong>AI Inventory Manager:</strong> A smart Telegram bot (OpenAI + WordPress API) to instantly add, update, or fetch product data via natural language.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-white/50">•</span>
+                    <span><strong>Automated PDF Quotes:</strong> A B2B sales bot that instantly generates professional PDF proposals by extracting live product images and pricing from the database.</span>
+                  </li>
+                </ul>
+
+              </div>
+            </div>
+
             {/* Experience 1 */}
             <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
               <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
