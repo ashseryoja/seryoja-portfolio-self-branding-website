@@ -60,8 +60,8 @@ export default function Home() {
           </p>
           <div className="flex items-center gap-4">
             <a
-              href="/cv/Document.png"
-              download="Sergey_Ashughyan_CV.png"
+              href="/cv/sergey_cv.pdf"
+              download="sergey_cv.pdf"
               className="inline-flex items-center justify-center px-6 py-3 border border-white/20 bg-white/5 hover:bg-white hover:text-black font-mono text-sm uppercase tracking-wider transition-all duration-300 w-fit"
             >
               Download CV
