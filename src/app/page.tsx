@@ -3,15 +3,16 @@
 import dynamic from 'next/dynamic';
 import Image from "next/image";
 const NetworkBackground = dynamic(() => import('@/components/NetworkBackground'), { ssr: false });
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GraduationCap } from "lucide-react";
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     gsap.registerPlugin(ScrollTrigger);
 
     // Kinetic Reveal for sections
@@ -41,7 +42,7 @@ export default function Home() {
 
   return (
     <div ref={containerRef} className="relative min-h-screen text-white bg-transparent">
-      <NetworkBackground />
+      {isMounted ? <NetworkBackground /> : null}
 
       {/* Content Overlay */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-32 pb-48 selection:bg-white selection:text-black">
@@ -102,6 +103,67 @@ export default function Home() {
           </div>
         </section>
 
+        {/* THE BUILDS / PROJECTS */}
+        <section className="py-20 reveal-section">
+          <div className="flex items-center gap-4 mb-12">
+            <div className="h-px bg-white/20 flex-1"></div>
+            <h3 className="font-mono text-xl tracking-widest uppercase text-white/80">The Builds</h3>
+            <div className="h-px bg-white/20 w-12"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+              <h4 className="text-2xl font-bold font-mono mb-3">AI Inventory Manager</h4>
+              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">OpenAI, WordPress API, Telegram</p>
+              <div className="mb-5 border border-white/10 rounded-md overflow-hidden bg-black/40">
+                <Image
+                  src="/assets/ecommerce-ai-agent.png"
+                  alt="AI Inventory Manager preview"
+                  width={1200}
+                  height={700}
+                  className="w-full h-auto object-cover transition-transform duration-500 hover:scale-[1.02]"
+                />
+              </div>
+              <p className="text-neutral-300 font-light leading-relaxed">
+                A smart Telegram bot to instantly add, update, or fetch product data via natural language.
+              </p>
+            </article>
+
+            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+              <h4 className="text-2xl font-bold font-mono mb-3">Automated PDF Quotes</h4>
+              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">n8n, B2B Automation</p>
+              <div className="mb-5 border border-white/10 rounded-md overflow-hidden bg-black/40">
+                <Image
+                  src="/assets/pricelist-pdf-maker.png"
+                  alt="Automated PDF Quotes preview"
+                  width={1200}
+                  height={700}
+                  className="w-full h-auto object-cover transition-transform duration-500 hover:scale-[1.02]"
+                />
+              </div>
+              <p className="text-neutral-300 font-light leading-relaxed">
+                A B2B sales bot that instantly generates professional PDF proposals by extracting live product images and pricing from the database.
+              </p>
+            </article>
+
+            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+              <h4 className="text-2xl font-bold font-mono mb-3">Logistics &amp; Order Management Dashboard</h4>
+              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">Claude Code CLI, Supabase, RetailCRM, Vercel</p>
+              <p className="text-neutral-300 font-light leading-relaxed">
+                Engineered a mini-dashboard to manage orders, furniture production, and truck logistics. Built complex automated workflows for dynamic SKU generation, e-commerce price list creation, and live data synchronization.
+              </p>
+            </article>
+
+            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+              <h4 className="text-2xl font-bold font-mono mb-3">OpenClaw DevOps Agent</h4>
+              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">Docker, OpenClaw, Shell, LLM APIs</p>
+              <p className="text-neutral-300 font-light leading-relaxed">
+                Designed an autonomous DevOps agent to deploy an open-source AI gateway. Automates infrastructure setup including Docker Compose orchestration, secure environment variable provisioning, and custom AI personality configuration.
+              </p>
+            </article>
+          </div>
+        </section>
+
         {/* THE LOG / EXPERIENCE */}
         <section className="py-20 reveal-section relative">
           <div className="absolute left-[15px] top-0 bottom-0 w-px bg-white/10 md:left-1/2"></div>
@@ -111,49 +173,11 @@ export default function Home() {
           </div>
 
           <div className="space-y-24">
-            {/* Experience 0: AI & Automation */}
-            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
-              <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
-                <h4 className="text-3xl font-bold font-mono">Ai automation low code engineer</h4>
-                <p className="text-neutral-500 font-mono mt-1 mb-4">n8n automations</p>
-                <div className="mt-6 border border-white/10 rounded-lg overflow-hidden relative group/img bg-white/5 w-full max-w-sm">
-                  <Image
-                    src="/log/n8n.jpg"
-                    alt="n8n AI Automation Workflows"
-                    width={1200}
-                    height={800}
-                    className="w-full h-auto object-cover group-hover/img:scale-105 transition-all duration-700"
-                  />
-                </div>
-              </div>
-              <div className="relative pl-12 md:pl-0">
-                <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
-                <h5 className="font-bold font-mono text-lg mb-2">AI & Automation</h5>
-                <p className="font-mono text-white/70 mb-2">Core Focus</p>
-                <p className="text-neutral-300 font-light leading-relaxed mb-6">
-                  I build AI-driven automation systems (n8n, OpenAI, APIs) to streamline operations and eliminate manual work.
-                </p>
-
-                <h5 className="font-bold font-mono text-lg mb-2">Featured Projects</h5>
-                <ul className="space-y-4 text-neutral-300 font-light leading-relaxed mb-6">
-                  <li className="flex gap-2">
-                    <span className="text-white/50">•</span>
-                    <span><strong>AI Inventory Manager:</strong> A smart Telegram bot (OpenAI + WordPress API) to instantly add, update, or fetch product data via natural language.</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-white/50">•</span>
-                    <span><strong>Automated PDF Quotes:</strong> A B2B sales bot that instantly generates professional PDF proposals by extracting live product images and pricing from the database.</span>
-                  </li>
-                </ul>
-
-              </div>
-            </div>
-
             {/* Experience 1 */}
             <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
               <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
                 <h4 className="text-3xl font-bold font-mono">DEO HOME</h4>
-                <p className="text-neutral-500 font-mono mt-1 mb-4">Full-stack Developer</p>
+                <p className="text-neutral-500 font-mono mt-1 mb-4">Full-Stack Developer &amp; Low-Code AI Automation Engineer</p>
                 <div className="flex flex-wrap gap-3 md:justify-end">
                   <a href="https://deohome.online/" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
                     deohome.online
@@ -166,7 +190,7 @@ export default function Home() {
               <div className="relative pl-12 md:pl-0">
                 <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
                 <p className="text-neutral-300 font-light leading-relaxed mb-4">
-                  Engineered and single-handedly developed a high-End furniture catalog and commercial eCommerce platform. Maintained optimal performance using React concepts alongside customized WordPress database solutions.
+                  Engineered and developed high-end furniture catalogs and commercial eCommerce platforms. Currently maintaining the platform and building AI-driven automation systems (n8n, OpenAI, APIs) to streamline internal operations, B2B sales, and eliminate manual workflows.
                 </p>
                 <div className="my-8 border border-white/10 rounded-lg overflow-hidden relative group/img bg-white/5">
                   <Image
@@ -197,31 +221,21 @@ export default function Home() {
               </div>
             </div>
 
-          </div>
-        </section>
-
-        {/* EDUCATION & ACADEMY */}
-        <section className="py-20 reveal-section">
-          <div className="flex items-center gap-4 mb-16">
-            <h3 className="flex items-center gap-3 font-mono text-xl tracking-widest uppercase text-white/80">
-              <GraduationCap className="w-6 h-6" />
-              The Academy
-            </h3>
-            <div className="h-px bg-white/20 flex-1"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
-            <div className="md:text-right border-l-2 md:border-l-0 md:border-r-2 border-white/10 pl-6 md:pl-0 md:pr-6">
-              <h4 className="text-3xl font-bold font-mono">NPUA</h4>
-              <p className="text-white font-mono mt-1">Software Engineering</p>
-              <p className="text-neutral-500 font-mono text-sm mt-1">2022 - 2027</p>
+            {/* Experience 3 */}
+            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
+              <div className="md:text-right pl-12 md:pl-0">
+                <h4 className="text-3xl font-bold font-mono">NPUA</h4>
+                <p className="text-neutral-500 font-mono mt-1">Software Engineering</p>
+              </div>
+              <div className="relative pl-12 md:pl-0">
+                <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
+                <p className="text-neutral-300 font-light leading-relaxed">
+                  Currently studying at the National Polytechnical University of Armenia.<br />
+                  Pursuing a Bachelor of Applied Science with a focus on Software Engineering.
+                </p>
+              </div>
             </div>
-            <div className="pt-2 md:pt-0">
-              <p className="text-neutral-300 font-light leading-relaxed">
-                Currently studying at the National Polytechnical University of Armenia.<br />
-                Pursuing a Bachelor of Applied Science with a focus on Software Engineering.
-              </p>
-            </div>
+
           </div>
         </section>
 
