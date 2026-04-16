@@ -50,16 +50,23 @@ export default function Home() {
         {/* HERO SECTION */}
         <section className="min-h-[80vh] flex flex-col justify-center reveal-section">
           <h2 className="font-mono text-sm tracking-[0.3em] uppercase opacity-70 mb-4 animate-pulse">
-            Junior Full Stack Web Developer & Low Code AI Automation Architect
+            FULL STACK DEVELOPER · AI AUTOMATION ENGINEER
           </h2>
           <h1 className="text-[12vw] sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] hover:animate-glitch transition-all cursor-default break-words">
             SERGEY<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-600">ASHUGHYAN</span>
           </h1>
           <p className="max-w-2xl text-xl font-light leading-relaxed text-neutral-400 mb-8">
-            I build AI agents and automation systems with <span className="text-white font-mono bg-white/10 px-2 py-1 rounded">n8n</span>, along with high-performance web applications.
+            I turn complex workflows into clean automations.<br />
+            n8n, OpenClaw, React, REST APIs — end to end.
           </p>
           <div className="flex items-center gap-4">
+            <button
+              onClick={() => document.getElementById('builds-section')?.scrollIntoView({ behavior: 'smooth' })}
+              className="inline-flex items-center justify-center px-6 py-3 border border-white/20 bg-transparent hover:bg-white hover:text-black font-mono text-sm uppercase tracking-wider transition-all duration-300 w-fit"
+            >
+              View Projects
+            </button>
             <a
               href="/cv/sergey_cv.pdf"
               download="sergey_cv.pdf"
@@ -104,7 +111,7 @@ export default function Home() {
         </section>
 
         {/* THE BUILDS / PROJECTS */}
-        <section className="py-20 reveal-section">
+        <section id="builds-section" className="py-20 reveal-section">
           <div className="flex items-center gap-4 mb-12">
             <div className="h-px bg-white/20 flex-1"></div>
             <h3 className="font-mono text-xl tracking-widest uppercase text-white/80">The Builds</h3>
