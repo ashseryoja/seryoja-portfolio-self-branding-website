@@ -60,17 +60,17 @@ export default function Home() {
             I turn complex workflows into clean automations.<br />
             n8n, OpenClaw, React, REST APIs — end to end.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <button
               onClick={() => document.getElementById('builds-section')?.scrollIntoView({ behavior: 'smooth' })}
-              className="inline-flex items-center justify-center px-6 py-3 border border-white/20 bg-transparent hover:bg-white hover:text-black font-mono text-sm uppercase tracking-wider transition-all duration-300 w-fit"
+              className="inline-flex items-center justify-center px-6 py-3 border border-white/20 bg-transparent hover:bg-white hover:text-black font-mono text-sm uppercase tracking-wider transition-all duration-300 w-fit text-center"
             >
               View Projects
             </button>
             <a
               href="/cv/sergey_cv.pdf"
               download="sergey_cv.pdf"
-              className="inline-flex items-center justify-center px-6 py-3 border border-white/20 bg-white/5 hover:bg-white hover:text-black font-mono text-sm uppercase tracking-wider transition-all duration-300 w-fit"
+              className="inline-flex items-center justify-center px-6 py-3 border border-white/20 bg-white/5 hover:bg-white hover:text-black font-mono text-sm uppercase tracking-wider transition-all duration-300 w-fit text-center"
             >
               Download CV
             </a>
