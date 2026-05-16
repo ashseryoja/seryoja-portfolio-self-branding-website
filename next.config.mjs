@@ -8,6 +8,12 @@ const withPWA = withPWAInit({
 });
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    experimental: {
+        outputFileTracingIncludes: {
+            '/api/chat': ['./src/lib/persona/**/*.md'],
+        },
+    },
+};
 
 export default withPWA(nextConfig);
