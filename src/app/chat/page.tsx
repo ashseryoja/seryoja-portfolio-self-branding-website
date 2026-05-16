@@ -98,16 +98,16 @@ export default function ChatPage() {
         setIsLoading(true);
 
         try {
-            // Send payload to Next.js API Route which proxies to n8n webhook
+            const history = messages
+                .filter((m) => m.id !== "system-1")
+                .map((m) => ({ role: m.role, content: m.content }));
+
             const res = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                // Fallback robust payload structure that most n8n templates expect
                 body: JSON.stringify({
                     chatInput: userMessage.content,
-                    message: userMessage.content,
-                    query: userMessage.content,
-                    sessionId: "user-session-" + Math.floor(Math.random() * 10000)
+                    history,
                 }),
             });
 
@@ -140,7 +140,7 @@ export default function ChatPage() {
             console.error("Chat error:", error);
             setMessages((prev) => [
                 ...prev,
-                { id: Date.now().toString(), role: "assistant", content: "Connection to n8n node lost. Please try again." }
+                { id: Date.now().toString(), role: "assistant", content: "Connection lost. Please try again." }
             ]);
         } finally {
             setIsLoading(false);

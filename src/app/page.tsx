@@ -113,9 +113,9 @@ export default function Home() {
               <ul className="space-y-4 font-light text-lg">
                 <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> <strong>OpenClaw</strong> (AI Agent Framework)</li>
                 <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> LangChain-style Agent Pipelines</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Claude / OpenAI API</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Prompt Engineering</li>
                 <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> RAG / Vector Search</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Claude Code</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Cursor</li>
               </ul>
             </div>
           </div>
@@ -129,7 +129,12 @@ export default function Home() {
             <div className="h-px bg-white/20 w-12"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <div className="flex items-center gap-4 mb-8">
+            <h4 className="font-mono text-sm tracking-widest uppercase text-white/60">Low-Code (n8n)</h4>
+            <div className="h-px bg-white/10 flex-1"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16">
             <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
               <h4 className="text-2xl font-bold font-mono mb-3">AI Inventory Manager</h4>
               <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">OpenAI, WordPress API, Telegram</p>
@@ -165,6 +170,30 @@ export default function Home() {
             </article>
 
             <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+              <h4 className="text-2xl font-bold font-mono mb-3">ElevenLabs Agent Manager</h4>
+              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">ElevenLabs, Telegram, AI</p>
+              <div className="mb-5 border border-white/10 rounded-md overflow-hidden bg-black/40">
+                <Image
+                  src="/assets/elevenlabs-agent-manager.png"
+                  alt="ElevenLabs Agent Manager preview"
+                  width={1200}
+                  height={700}
+                  className="w-full h-auto object-cover transition-transform duration-500 hover:scale-[1.02]"
+                />
+              </div>
+              <p className="text-neutral-300 font-light leading-relaxed">
+                Your ElevenLabs account manager with integrated AI allows you to manage your agents and their data directly in the Telegram chat.
+              </p>
+            </article>
+          </div>
+
+          <div className="flex items-center gap-4 mb-8">
+            <h4 className="font-mono text-sm tracking-widest uppercase text-white/60">Built with Code</h4>
+            <div className="h-px bg-white/10 flex-1"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
               <h4 className="text-2xl font-bold font-mono mb-3">Logistics &amp; Order Management Dashboard</h4>
               <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">Claude Code CLI, Supabase, RetailCRM, Vercel</p>
               <p className="text-neutral-300 font-light leading-relaxed">
@@ -191,11 +220,35 @@ export default function Home() {
           </div>
 
           <div className="space-y-24">
+            {/* Experience: UpSound */}
+            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
+              <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
+                <h4 className="text-3xl font-bold font-mono">UpSound</h4>
+                <p className="text-neutral-500 font-mono mt-1">Full-Stack Developer &amp; AI Engineer</p>
+                <p className="text-neutral-600 font-mono text-sm mt-1 mb-4">May 2026 — Present</p>
+                <div className="flex flex-wrap gap-3 md:justify-end">
+                  <a href="https://www.upsound.ai" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
+                    upsound.ai
+                  </a>
+                  <a href="https://upsound.org/" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
+                    upsound.org
+                  </a>
+                </div>
+              </div>
+              <div className="relative pl-12 md:pl-0">
+                <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
+                <p className="text-neutral-300 font-light leading-relaxed">
+                  Built a full-stack AI platform that helps independent musicians analyze tracks, generate covers and Reels, and plan releases. Shipped a Python/FastAPI backend (async SQLAlchemy, Supabase Postgres, aiogram Telegram bot) with 20+ API routers, 60+ services, and integrations with Google Gemini, xAI Grok, OpenRouter, Replicate, Yandex Music, and Spotify. Designed a token-based subscription system with T-Bank recurring payments, webhook signature validation, and a usage-tracking admin dashboard. Delivered the web client on Next.js 15 + React 19 with Supabase Auth, TanStack Query, Zustand, and a custom design system covering onboarding, release management, and cover generation.
+                </p>
+              </div>
+            </div>
+
             {/* Experience 1 */}
             <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
               <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
                 <h4 className="text-3xl font-bold font-mono">DEO HOME</h4>
-                <p className="text-neutral-500 font-mono mt-1 mb-4">Full-Stack Developer &amp; Low-Code AI Automation Engineer</p>
+                <p className="text-neutral-500 font-mono mt-1">Full-Stack Developer &amp; Low-Code AI Automation Engineer</p>
+                <p className="text-neutral-600 font-mono text-sm mt-1 mb-4">April 2025 — May 2026</p>
                 <div className="flex flex-wrap gap-3 md:justify-end">
                   <a href="https://deohome.online/" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
                     deohome.online
@@ -230,6 +283,7 @@ export default function Home() {
               <div className="md:text-right pl-12 md:pl-0">
                 <h4 className="text-3xl font-bold font-mono">Naghashyan Solutions</h4>
                 <p className="text-neutral-500 font-mono mt-1">Frontend Developer (Intern)</p>
+                <p className="text-neutral-600 font-mono text-sm mt-1">November 2022 — June 2023</p>
               </div>
               <div className="relative pl-12 md:pl-0">
                 <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
