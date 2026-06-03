@@ -10,6 +10,44 @@ type Message = {
     content: string;
 };
 
+const LINK_PATTERN = /(\[[^\]]+\]\((?:https?:\/\/[^\s)]+|\/[^\s)]*|#\/?[A-Za-z0-9_-]+)\)|https?:\/\/[^\s<]+|\/#[A-Za-z0-9_-]+|#\/?[A-Za-z0-9_-]+|\/contact|\/cv\/sergey_cv\.pdf)/g;
+
+function renderMessageContent(content: string, role: Message["role"]): React.ReactNode[] {
+    return content.split(LINK_PATTERN).filter(Boolean).map((part, index) => {
+        const markdownMatch = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+        const label = markdownMatch?.[1] || part;
+        const rawHref = markdownMatch?.[2] || part;
+        const href = rawHref.startsWith("#/")
+            ? `/#${rawHref.slice(2)}`
+            : rawHref.startsWith("#")
+                ? `/${rawHref}`
+                : rawHref;
+        const isLink = href.startsWith("http") || href.startsWith("/");
+
+        if (!isLink) {
+            return <span key={`${part}-${index}`}>{part}</span>;
+        }
+
+        const isExternal = href.startsWith("http");
+
+        return (
+            <a
+                key={`${href}-${index}`}
+                href={href}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noreferrer" : undefined}
+                className={`underline underline-offset-4 transition-colors ${
+                    role === "user"
+                        ? "text-black decoration-black/30 hover:text-black/70"
+                        : "text-white decoration-white/30 hover:text-white/70"
+                }`}
+            >
+                {label}
+            </a>
+        );
+    });
+}
+
 export default function ChatPage() {
     const [messages, setMessages] = useState<Message[]>([
         {
@@ -205,7 +243,7 @@ export default function ChatPage() {
 
                                     {/* Message Bubble */}
                                     <div className={`px-4 py-3 rounded-2xl border flex flex-col ${m.role === "user" ? "bg-white text-black border-transparent rounded-tr-sm" : "bg-white/[0.03] border-white/10 text-white rounded-tl-sm backdrop-blur-sm"}`}>
-                                        <p className="text-sm font-sans leading-relaxed whitespace-pre-wrap">{m.content}</p>
+                                        <p className="text-sm font-sans leading-relaxed whitespace-pre-wrap">{renderMessageContent(m.content, m.role)}</p>
                                     </div>
                                 </div>
                             </motion.div>

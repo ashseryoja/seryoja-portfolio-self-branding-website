@@ -2,14 +2,35 @@
 
 import dynamic from 'next/dynamic';
 import Image from "next/image";
+import { X } from "lucide-react";
 const NetworkBackground = dynamic(() => import('@/components/NetworkBackground'), { ssr: false });
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+const upsoundPreviews = [
+  {
+    src: "/assets/upsound-ai-playlist-pitching.jpg",
+    title: "Playlist Pitching",
+    alt: "UpSound AI playlist pitching interface",
+  },
+  {
+    src: "/assets/upsound-ai-reels-scenarios.jpg",
+    title: "Reels Scenarios",
+    alt: "UpSound AI Reels scenario generator interface",
+  },
+  {
+    src: "/assets/upsound-ai-cover-generation.jpg",
+    title: "Cover Generation",
+    alt: "UpSound AI cover generation interface",
+  },
+];
+
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const previewModalRef = useRef<HTMLDivElement>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [selectedPreview, setSelectedPreview] = useState<(typeof upsoundPreviews)[number] | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -39,6 +60,32 @@ export default function Home() {
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, []);
+
+  useEffect(() => {
+    if (!selectedPreview) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSelectedPreview(null);
+      }
+    };
+    const handlePointerDown = (event: PointerEvent) => {
+      const modal = previewModalRef.current;
+      if (modal && event.target instanceof Node && !modal.contains(event.target)) {
+        setSelectedPreview(null);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.body.style.overflow = "";
+    };
+  }, [selectedPreview]);
 
   return (
     <div ref={containerRef} className="relative min-h-screen text-white bg-transparent">
@@ -78,7 +125,7 @@ export default function Home() {
         </section>
 
         {/* SKILLS GRID */}
-        <section className="min-h-screen flex flex-col justify-center py-20 reveal-section">
+        <section id="skills-section" className="min-h-screen flex flex-col justify-center py-20 reveal-section scroll-mt-24">
           <div className="flex items-center gap-4 mb-12">
             <div className="h-px bg-white/20 flex-1"></div>
             <h3 className="font-mono text-xl tracking-widest uppercase text-white/80">The Skills Grid</h3>
@@ -122,20 +169,20 @@ export default function Home() {
         </section>
 
         {/* THE BUILDS / PROJECTS */}
-        <section id="builds-section" className="py-20 reveal-section">
+        <section id="builds-section" className="py-20 reveal-section scroll-mt-24">
           <div className="flex items-center gap-4 mb-12">
             <div className="h-px bg-white/20 flex-1"></div>
             <h3 className="font-mono text-xl tracking-widest uppercase text-white/80">The Builds</h3>
             <div className="h-px bg-white/20 w-12"></div>
           </div>
 
-          <div className="flex items-center gap-4 mb-8">
+          <div id="low-code-n8n-section" className="flex items-center gap-4 mb-8 scroll-mt-24">
             <h4 className="font-mono text-sm tracking-widest uppercase text-white/60">Low-Code (n8n)</h4>
             <div className="h-px bg-white/10 flex-1"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16">
-            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+            <article id="ai-inventory-manager" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
               <h4 className="text-2xl font-bold font-mono mb-3">AI Inventory Manager</h4>
               <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">OpenAI, WordPress API, Telegram</p>
               <div className="mb-5 border border-white/10 rounded-md overflow-hidden bg-black/40">
@@ -152,7 +199,7 @@ export default function Home() {
               </p>
             </article>
 
-            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+            <article id="automated-pdf-quotes" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
               <h4 className="text-2xl font-bold font-mono mb-3">Automated PDF Quotes</h4>
               <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">n8n, B2B Automation</p>
               <div className="mb-5 border border-white/10 rounded-md overflow-hidden bg-black/40">
@@ -169,7 +216,7 @@ export default function Home() {
               </p>
             </article>
 
-            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+            <article id="elevenlabs-agent-manager" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
               <h4 className="text-2xl font-bold font-mono mb-3">ElevenLabs Agent Manager</h4>
               <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">ElevenLabs, Telegram, AI</p>
               <div className="mb-5 border border-white/10 rounded-md overflow-hidden bg-black/40">
@@ -187,13 +234,13 @@ export default function Home() {
             </article>
           </div>
 
-          <div className="flex items-center gap-4 mb-8">
+          <div id="built-with-code-section" className="flex items-center gap-4 mb-8 scroll-mt-24">
             <h4 className="font-mono text-sm tracking-widest uppercase text-white/60">Built with Code</h4>
             <div className="h-px bg-white/10 flex-1"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+            <article id="logistics-dashboard" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
               <h4 className="text-2xl font-bold font-mono mb-3">Logistics &amp; Order Management Dashboard</h4>
               <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">Claude Code CLI, Supabase, RetailCRM, Vercel</p>
               <p className="text-neutral-300 font-light leading-relaxed">
@@ -201,7 +248,7 @@ export default function Home() {
               </p>
             </article>
 
-            <article className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300">
+            <article id="openclaw-devops-agent" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
               <h4 className="text-2xl font-bold font-mono mb-3">OpenClaw DevOps Agent</h4>
               <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">Docker, OpenClaw, Shell, LLM APIs</p>
               <p className="text-neutral-300 font-light leading-relaxed">
@@ -212,7 +259,7 @@ export default function Home() {
         </section>
 
         {/* THE LOG / EXPERIENCE */}
-        <section className="py-20 reveal-section relative">
+        <section id="log-section" className="py-20 reveal-section relative scroll-mt-24">
           <div className="absolute left-[15px] top-0 bottom-0 w-px bg-white/10 md:left-1/2"></div>
 
           <div className="flex items-center gap-4 mb-20 relative z-10 w-full justify-center">
@@ -221,10 +268,10 @@ export default function Home() {
 
           <div className="space-y-24">
             {/* Experience: UpSound */}
-            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
+            <div id="upsound-experience" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group scroll-mt-24">
               <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
                 <h4 className="text-3xl font-bold font-mono">UpSound</h4>
-                <p className="text-neutral-500 font-mono mt-1">Full-Stack Developer &amp; AI Engineer</p>
+                <p className="text-neutral-500 font-mono mt-1">AI Integrator / Automation Builder</p>
                 <p className="text-neutral-600 font-mono text-sm mt-1 mb-4">May 2026 — Present</p>
                 <div className="flex flex-wrap gap-3 md:justify-end">
                   <a href="https://www.upsound.ai" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
@@ -237,14 +284,56 @@ export default function Home() {
               </div>
               <div className="relative pl-12 md:pl-0">
                 <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
-                <p className="text-neutral-300 font-light leading-relaxed">
-                  Built a full-stack AI platform that helps independent musicians analyze tracks, generate covers and Reels, and plan releases. Shipped a Python/FastAPI backend (async SQLAlchemy, Supabase Postgres, aiogram Telegram bot) with 20+ API routers, 60+ services, and integrations with Google Gemini, xAI Grok, OpenRouter, Replicate, Yandex Music, and Spotify. Designed a token-based subscription system with T-Bank recurring payments, webhook signature validation, and a usage-tracking admin dashboard. Delivered the web client on Next.js 15 + React 19 with Supabase Auth, TanStack Query, Zustand, and a custom design system covering onboarding, release management, and cover generation.
+                <p className="text-neutral-300 font-light leading-relaxed mb-5">
+                  Built <span className="font-semibold text-white">UpSound AI</span>, a production AI/SaaS platform for independent musicians. The product helps artists analyze tracks, generate cover concepts, Reels scripts, playlist pitches, and release promotion plans through a Next.js web app, Telegram bot, FastAPI backend, PostgreSQL/Supabase data layer, background generation queues, and payment infrastructure.
                 </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                  <div className="border border-white/10 bg-white/[0.03] p-4 rounded-sm">
+                    <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-2">Architecture</p>
+                    <p className="text-sm text-neutral-300 leading-relaxed">Next.js 15, React 19, TypeScript, Supabase Auth, FastAPI, aiogram 3, async SQLAlchemy, Redis, APScheduler.</p>
+                  </div>
+                  <div className="border border-white/10 bg-white/[0.03] p-4 rounded-sm">
+                    <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-2">AI Pipeline</p>
+                    <p className="text-sm text-neutral-300 leading-relaxed">Gemini, OpenRouter, xAI Grok, image generation, CLIP embeddings, pgvector search, clustering, provider fallbacks.</p>
+                  </div>
+                  <div className="border border-white/10 bg-white/[0.03] p-4 rounded-sm">
+                    <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-2">Monetization</p>
+                    <p className="text-sm text-neutral-300 leading-relaxed">Token subscriptions, T-Bank recurring payments, webhook validation, payment reconciliation, Cloudflare R2 storage.</p>
+                  </div>
+                  <div className="border border-white/10 bg-white/[0.03] p-4 rounded-sm">
+                    <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-2">Production Quality</p>
+                    <p className="text-sm text-neutral-300 leading-relaxed">PostHog analytics, AI cost tracking, SQLAdmin dashboards, rate limits, 128 backend tests and 18 frontend tests.</p>
+                  </div>
+                </div>
+                <p className="text-neutral-400 font-light leading-relaxed border-l-2 border-white/20 pl-4 py-1">
+                  Owned end-to-end delivery across frontend UX, backend APIs, Telegram workflows, AI integrations, payments, observability, and production deploys on Vercel and Railway.
+                </p>
+                <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {upsoundPreviews.map((preview) => (
+                    <button
+                      key={preview.src}
+                      type="button"
+                      onClick={() => setSelectedPreview(preview)}
+                      className="group/preview overflow-hidden border border-white/10 bg-white/[0.03] rounded-sm text-left transition-colors hover:border-white/30 focus:outline-none focus:ring-1 focus:ring-white/40"
+                      aria-label={`Open ${preview.title} preview`}
+                    >
+                      <Image
+                        src={preview.src}
+                        alt={preview.alt}
+                        width={1900}
+                        height={958}
+                        sizes="(min-width: 768px) 14vw, 100vw"
+                        className="aspect-video w-full object-cover opacity-80 transition-all duration-500 group-hover/preview:scale-[1.03] group-hover/preview:opacity-100"
+                      />
+                      <p className="px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-white/50">{preview.title}</p>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
             {/* Experience 1 */}
-            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
+            <div id="deo-home-experience" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group scroll-mt-24">
               <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
                 <h4 className="text-3xl font-bold font-mono">DEO HOME</h4>
                 <p className="text-neutral-500 font-mono mt-1">Full-Stack Developer &amp; Low-Code AI Automation Engineer</p>
@@ -279,7 +368,7 @@ export default function Home() {
             </div>
 
             {/* Experience 2 */}
-            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
+            <div id="naghashyan-experience" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group scroll-mt-24">
               <div className="md:text-right pl-12 md:pl-0">
                 <h4 className="text-3xl font-bold font-mono">Naghashyan Solutions</h4>
                 <p className="text-neutral-500 font-mono mt-1">Frontend Developer (Intern)</p>
@@ -294,7 +383,7 @@ export default function Home() {
             </div>
 
             {/* Experience 3 */}
-            <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group">
+            <div id="npua-education" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group scroll-mt-24">
               <div className="md:text-right pl-12 md:pl-0">
                 <h4 className="text-3xl font-bold font-mono">NPUA</h4>
                 <p className="text-neutral-500 font-mono mt-1">Software Engineering</p>
@@ -312,6 +401,49 @@ export default function Home() {
         </section>
 
       </div>
+      {selectedPreview ? (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center px-4 py-8"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${selectedPreview.title} preview`}
+        >
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/85 backdrop-blur-md"
+            onClick={() => setSelectedPreview(null)}
+            onMouseDown={() => setSelectedPreview(null)}
+            onTouchStart={() => setSelectedPreview(null)}
+            data-preview-backdrop
+            tabIndex={-1}
+            aria-label="Close preview backdrop"
+          />
+          <div
+            ref={previewModalRef}
+            className="relative z-10 w-full max-w-6xl overflow-hidden rounded-sm border border-white/15 bg-black shadow-[0_30px_100px_rgba(0,0,0,0.7)]"
+          >
+            <button
+              type="button"
+              onClick={() => setSelectedPreview(null)}
+              className="absolute left-3 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-black/70 text-white/70 backdrop-blur-md transition-colors hover:bg-white hover:text-black focus:outline-none focus:ring-1 focus:ring-white/50"
+              aria-label="Close preview"
+            >
+              <X size={18} />
+            </button>
+            <Image
+              src={selectedPreview.src}
+              alt={selectedPreview.alt}
+              width={1900}
+              height={958}
+              sizes="90vw"
+              className="max-h-[82vh] w-full object-contain"
+            />
+            <div className="border-t border-white/10 px-4 py-3">
+              <p className="font-mono text-xs uppercase tracking-widest text-white/60">{selectedPreview.title}</p>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

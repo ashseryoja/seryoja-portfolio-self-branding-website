@@ -1,20 +1,33 @@
 # Experience
 
-## UpSound — Full-Stack Developer & AI Engineer
+## UpSound — AI Integrator / Automation Builder
 *May 2026 — Present*
 Websites: https://www.upsound.ai, https://upsound.org/
 
-I'm building UpSound — an AI platform for independent musicians and artists. It bundles
-a large set of LLM models so an artist can generate Reels scenarios, song covers, track
-pitching, media plans, and PR / promotion plans all in one place.
+I'm building UpSound AI — a production AI/SaaS platform for independent musicians. It
+helps artists analyze tracks, generate cover concepts, Reels scripts, playlist pitches,
+and release promotion plans. The product is not a pet project: it includes a Next.js web
+app, Telegram bot, FastAPI backend, PostgreSQL/Supabase data layer, background generation
+queues, admin tooling, payments, analytics, and production deploys.
 
-Under the hood: Python / FastAPI backend (async SQLAlchemy, Supabase Postgres, aiogram
-Telegram bot) with 20+ API routers, 60+ services, and integrations with Google Gemini,
-xAI Grok, OpenRouter, Replicate, Yandex Music, and Spotify. Token-based subscription
-system with T-Bank recurring payments, webhook signature validation, and a usage-tracking
-admin dashboard. Web client on Next.js 15 + React 19 with Supabase Auth, TanStack Query,
-Zustand, and a custom design system covering onboarding, release management, and cover
-generation.
+Frontend stack: Next.js 15, React 19, TypeScript, App Router, Tailwind CSS, shadcn/ui,
+Radix UI, lucide-react, TanStack Query, Zustand, Axios, Supabase Auth, React Hook Form,
+Zod, Framer Motion, GSAP, Lottie, PostHog, Playwright, and ESLint.
+
+Backend stack: Python 3.13, FastAPI, Uvicorn, aiogram 3, async SQLAlchemy 2, asyncpg,
+Alembic, PostgreSQL/Supabase, pgvector, Pydantic, SQLAdmin, APScheduler, Redis, SlowAPI,
+Loguru, and PyJWT.
+
+AI and integrations: Google Gemini / Google GenAI, OpenRouter, xAI Grok through an
+OpenAI-compatible API, LaoZhang image API, CLIP embeddings, HDBSCAN clustering, Pillow,
+Playwright scraping, BeautifulSoup, Yandex Music API, Spotify API, and Telegram Bot API.
+
+Payments and infrastructure: T-Bank/Tinkoff Acquiring, recurring payments, webhook
+signature validation, token subscriptions, payment reconciliation, Cloudflare R2 via
+boto3, Supabase Storage/Auth, Railway backend deploy, Vercel frontend deploy, PostHog
+analytics, and AI usage/cost tracking.
+
+Quality signals: about 128 backend pytest tests and 18 frontend tests.
 
 ## DEO HOME — Full-Stack Developer & Low-Code AI Automation Engineer
 *April 2025 — May 2026*
