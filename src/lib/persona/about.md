@@ -17,7 +17,8 @@ After that I enrolled at the National Polytechnical University of Armenia (NPUA)
 of Software Engineering, where I'm still studying.
 
 ## Where I am now
-I'm a Full-Stack Developer and AI Automation Engineer. I turn complex workflows into
-clean automations and ship end-to-end products — frontend, backend, and the AI / agent
-layer that ties them together. Currently I'm building UpSound, an AI platform for
+I'm a Full-Stack Developer, AI Integrator, and AI Automation Engineer. I build AI
+integrations and automation systems that connect products, data, teams, and business
+workflows. I can take an idea from prototype to production: interfaces, APIs, agents,
+payments, analytics, and deployment. Currently I'm building UpSound, an AI platform for
 musicians and artists.

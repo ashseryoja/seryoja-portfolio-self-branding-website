@@ -97,15 +97,15 @@ export default function Home() {
         {/* HERO SECTION */}
         <section className="min-h-[80vh] flex flex-col justify-center reveal-section">
           <h2 className="font-mono text-sm tracking-[0.3em] uppercase opacity-70 mb-4 animate-pulse">
-            FULL STACK DEVELOPER · AI AUTOMATION ENGINEER
+            FULL STACK DEVELOPER · AI INTEGRATOR · AI AUTOMATION ENGINEER
           </h2>
           <h1 className="text-[12vw] sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] hover:animate-glitch transition-all cursor-default break-words">
             SERGEY<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-600">ASHUGHYAN</span>
           </h1>
           <p className="max-w-2xl text-xl font-light leading-relaxed text-neutral-400 mb-8">
-            I turn complex workflows into clean automations.<br />
-            n8n, OpenClaw, React, REST APIs — end to end.
+            I build AI integrations and automation systems that connect products, data, teams, and business workflows.<br />
+            From idea to production: interfaces, APIs, agents, payments, and deployment.
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <button
@@ -136,11 +136,12 @@ export default function Home() {
             <div className="border border-white/10 p-8 rounded-sm hover:border-white/40 transition-colors group invert-hover">
               <h4 className="text-2xl font-bold mb-6 font-mono border-b border-white/10 pb-4 group-hover:border-black/20">Frontend</h4>
               <ul className="space-y-4 font-light text-lg">
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Production AI/SaaS Interfaces</li>
                 <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> React.js & Next.js</li>
                 <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> JavaScript / TypeScript</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> HTML, CSS, SCSS, Tailwind</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Design Systems & Product UX</li>
                 <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> PWA & WebGL (Three.js / GSAP)</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> WordPress Architecture</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Analytics & User Tracking</li>
               </ul>
             </div>
 
@@ -148,21 +149,21 @@ export default function Home() {
               <h4 className="text-2xl font-bold mb-6 font-mono border-b border-white/10 pb-4 group-hover:border-black/20">Backend & Automation</h4>
               <ul className="space-y-4 font-light text-lg">
                 <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> <strong>n8n</strong> (Low-Code AI Automation)</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Node.js & API Integrations</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Telegram Bot Development</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Supabase / PostgreSQL</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Docker, Git & Vercel</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> API Integrations & Automation Architecture</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> FastAPI, Workers, Queues & Schedulers</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Telegram Bots & Product Flows</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Payments, Subscriptions & Webhooks</li>
               </ul>
             </div>
 
             <div className="border border-white/10 p-8 rounded-sm hover:border-white/40 transition-colors group invert-hover">
               <h4 className="text-2xl font-bold mb-6 font-mono border-b border-white/10 pb-4 group-hover:border-black/20">AI & LLM Tools</h4>
               <ul className="space-y-4 font-light text-lg">
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> <strong>OpenClaw</strong> (AI Agent Framework)</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> LangChain-style Agent Pipelines</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> RAG / Vector Search</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Claude Code</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Cursor</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> AI Product Integration</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Multi-Provider LLM Orchestration</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> RAG, pgvector & CLIP Embeddings</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> AI Usage & Cost Tracking</li>
+                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Agent Pipelines & Tooling</li>
               </ul>
             </div>
           </div>
