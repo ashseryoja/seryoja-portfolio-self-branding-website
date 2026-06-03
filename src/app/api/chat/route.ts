@@ -12,6 +12,30 @@ const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 const MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
 const MAX_HISTORY = 20;
 
+function getOpenAIErrorReply(status: number, errorBody: string): string {
+  try {
+    const parsed = JSON.parse(errorBody);
+    const code = parsed?.error?.code;
+    const type = parsed?.error?.type;
+
+    if (status === 429 && (code === "insufficient_quota" || type === "insufficient_quota")) {
+      return "AI chat is temporarily unavailable: the server OpenAI quota is exhausted. Please check billing or replace the API key.";
+    }
+
+    if (status === 401) {
+      return "AI chat is temporarily unavailable: the server OpenAI API key is invalid.";
+    }
+
+    if (status === 404 || code === "model_not_found") {
+      return `AI chat is temporarily unavailable: the configured model (${MODEL}) is not available for this API key.`;
+    }
+  } catch {
+    // Fall back to the generic message below when the upstream error is not JSON.
+  }
+
+  return "Upstream LLM error. Try again in a moment.";
+}
+
 export async function POST(request: Request) {
   try {
     const apiKey = process.env.OPENAI_API_KEY;
@@ -68,7 +92,7 @@ export async function POST(request: Request) {
       const errText = await response.text();
       console.error("OpenAI error:", response.status, errText);
       return NextResponse.json(
-        { reply: "Upstream LLM error. Try again in a moment." },
+        { reply: getOpenAIErrorReply(response.status, errText) },
         { status: 502 }
       );
     }
