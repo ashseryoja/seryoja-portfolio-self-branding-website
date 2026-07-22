@@ -292,6 +292,8 @@ export default function ChatPage() {
                     <button
                         type="submit"
                         disabled={!input.trim() || isLoading}
+                        aria-label="Send message"
+                        title="Send message"
                         className="absolute right-2 p-2 bg-white text-black rounded-full hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center"
                     >
                         <Send size={18} className="translate-x-[1px] -translate-y-[1px]" />
