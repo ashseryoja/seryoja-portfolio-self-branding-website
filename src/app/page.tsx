@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import Image from "next/image";
-import { X } from "lucide-react";
+import { ExternalLink, X } from "lucide-react";
 const NetworkBackground = dynamic(() => import('@/components/NetworkBackground'), { ssr: false });
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
@@ -275,11 +275,9 @@ export default function Home() {
                 <p className="text-neutral-500 font-mono mt-1">AI Integrator / Automation Builder</p>
                 <p className="text-neutral-600 font-mono text-sm mt-1 mb-4">May 2026 — Present</p>
                 <div className="flex flex-wrap gap-3 md:justify-end">
-                  <a href="https://www.upsound.ai" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
-                    upsound.ai
-                  </a>
-                  <a href="https://upsound.org/" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
-                    upsound.org
+                  <a href="https://www.upsound.ai/" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
+                    View UpSound AI
+                    <ExternalLink size={13} aria-hidden="true" />
                   </a>
                 </div>
               </div>
