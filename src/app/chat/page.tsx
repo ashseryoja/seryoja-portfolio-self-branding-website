@@ -10,7 +10,7 @@ type Message = {
     content: string;
 };
 
-const LINK_PATTERN = /(\[[^\]]+\]\((?:https?:\/\/[^\s)]+|\/[^\s)]*|#\/?[A-Za-z0-9_-]+)\)|https?:\/\/[^\s<]+|\/#[A-Za-z0-9_-]+|#\/?[A-Za-z0-9_-]+|\/contact|\/cv\/sergey_cv\.pdf)/g;
+const LINK_PATTERN = /(\[[^\]]+\]\((?:https?:\/\/[^\s)]+|\/[^\s)]*|#\/?[A-Za-z0-9_-]+)\)|https?:\/\/[^\s<]+|\/#[A-Za-z0-9_-]+|#\/?[A-Za-z0-9_-]+|\/contact|\/cv\/Sergey_Ashughyan_CV\.pdf)/g;
 
 function renderMessageContent(content: string, role: Message["role"]): React.ReactNode[] {
     return content.split(LINK_PATTERN).filter(Boolean).map((part, index) => {

@@ -16,7 +16,7 @@ internal relative links so they work in production and locally.
 - Naghashyan Solutions experience: /#naghashyan-experience
 - NPUA education: /#npua-education
 - Contact page: /contact
-- CV PDF: /cv/sergey_cv.pdf
+- CV PDF: /cv/Sergey_Ashughyan_CV.pdf
 
 ## Project anchors
 - AI Inventory Manager: /#ai-inventory-manager
