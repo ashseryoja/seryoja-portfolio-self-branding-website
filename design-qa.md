@@ -37,6 +37,7 @@ The contribution grid was inspected at desktop and mobile sizes. A separate crop
 4. Reworked the section as a transparent part of the page, matched the existing section-heading system, removed decorative green accents, and applied GitHub's official dark contribution colors.
 5. Post-revision desktop and mobile captures show the section blending into the page while preserving clear hierarchy and readable overflow behavior.
 6. Final feedback requested removing the remaining separator lines and eliminating the two-tone edge on inactive cells. Removed every section divider and all cell borders; the contribution grid now uses monolithic color fills.
+7. A close-up reference revealed the browser still presenting a lighter outer edge around inactive cells. Locked every cell and legend swatch to a single inline background color and explicitly disabled border, outline, and box shadow. The refreshed production preview shows uniform inactive-day fills.
 
 ## Primary interactions and runtime checks
 

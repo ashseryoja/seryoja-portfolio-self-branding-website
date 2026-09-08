@@ -20,13 +20,7 @@ type GithubActivityData = {
   days: ContributionDay[];
 };
 
-const levelStyles = [
-  "bg-[#161b22]",
-  "bg-[#0e4429]",
-  "bg-[#006d32]",
-  "bg-[#26a641]",
-  "bg-[#39d353]",
-];
+const levelColors = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
 
 function formatDate(date: string) {
   return new Intl.DateTimeFormat("en", {
@@ -130,10 +124,16 @@ export default function GithubActivity() {
                   role="gridcell"
                   title={day.date ? `${day.count || "No"} contribution${day.count === 1 ? "" : "s"} on ${formatDate(day.date)}` : undefined}
                   aria-label={day.date ? `${day.count || "No"} contribution${day.count === 1 ? "" : "s"} on ${formatDate(day.date)}` : undefined}
-                  className={`h-[13px] w-[13px] rounded-[3px] transition duration-200 hover:scale-125 hover:ring-1 hover:ring-white/50 sm:h-[15px] sm:w-[15px] ${
-                    status === "ready" ? levelStyles[day.level] : "animate-pulse bg-[#161b22]"
+                  className={`block h-[13px] w-[13px] rounded-[3px] transition-transform duration-200 hover:scale-125 sm:h-[15px] sm:w-[15px] ${
+                    status === "ready" ? "" : "animate-pulse"
                   }`}
-                  style={status !== "ready" ? { animationDelay: `${(index % 53) * 18}ms` } : undefined}
+                  style={{
+                    backgroundColor: status === "ready" ? levelColors[day.level] : levelColors[0],
+                    border: 0,
+                    outline: 0,
+                    boxShadow: "none",
+                    ...(status !== "ready" ? { animationDelay: `${(index % 53) * 18}ms` } : {}),
+                  }}
                 />
               ))}
             </div>
@@ -145,8 +145,13 @@ export default function GithubActivity() {
             </p>
             <div className="flex items-center gap-2 font-mono uppercase tracking-[0.14em]" aria-label="Contribution intensity legend">
               <span>Less</span>
-              {levelStyles.map((style, index) => (
-                <span key={style} className={`h-2.5 w-2.5 rounded-[2px] ${style}`} aria-label={`Activity level ${index}`} />
+              {levelColors.map((color, index) => (
+                <span
+                  key={color}
+                  className="block h-2.5 w-2.5 rounded-[2px]"
+                  style={{ backgroundColor: color, border: 0, outline: 0, boxShadow: "none" }}
+                  aria-label={`Activity level ${index}`}
+                />
               ))}
               <span>More</span>
             </div>
