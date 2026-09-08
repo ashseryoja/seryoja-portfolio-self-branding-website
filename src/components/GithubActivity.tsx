@@ -73,7 +73,7 @@ export default function GithubActivity() {
         <div className="pt-4 md:pt-6">
           <div className="pb-2">
             <div
-              className="github-activity-grid mx-auto grid w-max gap-[3px]"
+              className="github-activity-grid mx-auto grid w-max"
               role="grid"
               aria-label={`GitHub activity snapshot with ${activeDays} active days across ${WEEK_COUNT} weeks`}
             >

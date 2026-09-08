@@ -2,12 +2,13 @@
 
 - Source visual truth: `/var/folders/6j/zzbt25dx4w94qh7jsw7c_7fw0000gn/T/codex-clipboard-bc2ab40a-4332-4233-b0fe-60123bfda77d.png`
 - Mobile spacing reference: `/var/folders/6j/zzbt25dx4w94qh7jsw7c_7fw0000gn/T/codex-clipboard-37e02882-ee93-498f-9360-d43f6fdbe24e.png`
+- Latest scale-feedback reference: `/var/folders/6j/zzbt25dx4w94qh7jsw7c_7fw0000gn/T/codex-clipboard-7e143151-4031-469b-adac-18300aacbc2b.png`
 - Activity source pixels: 1125 × 581
 - Implementation: `/Users/seryoja/Documents/portfolio-website/src/components/GithubActivity.tsx`
-- Browser-rendered implementation evidence: Codex in-app Browser tab 1, final production preview at `http://127.0.0.1:3005/#github-activity` (browser capture emitted in the task; this browser surface does not expose a filesystem screenshot path)
-- Desktop viewport and capture: 1200 × 900 CSS px, 1200 × 900 pixels, device scale factor 1
-- Mobile viewport and capture: 390 × 844 CSS px, 390 × 844 pixels, device scale factor 1
-- Density normalization: none required; both implementation captures were evaluated at 1×
+- Browser-rendered implementation evidence: Codex in-app Browser tab 1, final production preview at `http://127.0.0.1:3005/?preview=github-scale-2#github-activity` (browser capture emitted in the task; this browser surface does not expose a filesystem screenshot path)
+- Latest desktop viewport and capture: 919 × 807 CSS px, device scale factor 2
+- Mobile viewport and capture: prior validated 390 × 844 CSS px, device scale factor 1; the final 15 px mobile calendar width is 285 px, remaining within the same tested content width without clipping
+- Density normalization: visual proportions were evaluated in CSS pixels; the latest browser capture was displayed at 2× device density
 - State: supplied 16-week activity snapshot, 84 visibly active days
 
 ## Findings
@@ -15,12 +16,12 @@
 No actionable P0, P1, or P2 differences remain.
 
 - Fonts and typography: the section heading uses the portfolio's existing `font-mono`, uppercase treatment, and tracking. Metadata, snapshot totals, and legend retain a clear size and weight hierarchy.
-- Spacing and layout rhythm: the seven-row calendar preserves the reference composition, with a centered grid, compact three-pixel gaps, and small radii. The section is no longer presented as a standalone card: its background is transparent and all decorative horizontal separators have been removed.
+- Spacing and layout rhythm: the seven-row calendar preserves the reference composition, with a centered grid, compact three-pixel mobile and four-pixel desktop gaps, and small radii. The section is no longer presented as a standalone card: its background is transparent and all decorative horizontal separators have been removed.
 - Colors and visual tokens: the decorative green line and green interaction accents were removed. Contribution cells now use GitHub's dark contribution palette exactly: `#161b22`, `#0e4429`, `#006d32`, `#26a641`, and `#39d353`. Cells have no border, so inactive days render as a single uninterrupted `#161b22` surface.
 - Image quality and asset fidelity: the reference contains no raster imagery beyond the rendered data visualization. The implementation uses semantic contribution cells and the project's existing Lucide icon system; no placeholder asset substitutions are present.
 - Copy and content: the UI clearly identifies the supplied data as a contribution snapshot. It reports only values that can be derived from the screenshot: 16 weeks and 84 active days.
 - Accessibility: the section has a named heading, the GitHub link has an explicit accessible name, and visible snapshot cells expose week, weekday-position, and intensity labels.
-- Responsive behavior: at 390 px the Hero occupies the first small viewport before GitHub activity begins. The 16-week graph fits the available width without horizontal clipping, and the heading-to-profile gap is compact.
+- Responsive behavior: at 390 px the Hero occupies the first small viewport before GitHub activity begins. The 16-week graph uses 15 px cells and fits the available width without horizontal clipping. From 640 px upward, the calendar scales fluidly from 19 px to a restrained 24 px maximum so it has enough visual presence without returning to the oversized full-width treatment.
 
 ## Full-view comparison evidence
 
@@ -28,7 +29,7 @@ The implementation reproduces the supplied snapshot as a 16-column, seven-row se
 
 ## Focused region comparison evidence
 
-The supplied activity crop and the rendered mobile section were inspected together. Cell positions, missing final-week cells, intensity distribution, compact title/profile rhythm, and mobile fit match the requested target.
+The supplied activity crop, the latest scale-feedback screenshot, and the rendered section were inspected together. Cell positions, missing final-week cells, intensity distribution, compact title/profile rhythm, and responsive fit match the requested target. The new desktop footprint corrects the underweighted graph visible in the scale-feedback screenshot without approaching the previously rejected oversized treatment.
 
 ## Comparison history
 
@@ -42,6 +43,7 @@ The supplied activity crop and the rendered mobile section were inspected togeth
 8. Mobile feedback requested a full-screen first Hero, a smaller title/profile gap, and replacement of the public 12-month GitHub response with the supplied real activity snapshot.
 9. Set the mobile Hero to the remaining small-viewport height, reduced the section-heading margin, reconstructed the supplied 16-week pattern, and removed the misleading live endpoint and totals.
 10. Desktop feedback clarified that the activity screenshot was a data reference, not a scale reference. Restored standard GitHub-like 13 px mobile and 15 px desktop cells with compact 3 px gaps while preserving the supplied pattern.
+11. Follow-up feedback showed that the compact desktop graph had become visually underweighted. Increased the mobile cells to 15 px and made desktop sizing fluid between 19 px and 24 px with 4 px gaps, retaining the truthful 16-week data instead of fabricating additional history.
 
 ## Primary interactions and runtime checks
 

@@ -49,11 +49,13 @@ body {
 }
 
 .github-activity-grid {
-  grid-template-columns: repeat(16, 13px);
+  grid-template-columns: repeat(16, 15px);
+  gap: 3px;
 }
 
 @media (min-width: 640px) {
   .github-activity-grid {
-    grid-template-columns: repeat(16, 15px);
+    grid-template-columns: repeat(16, clamp(19px, 2vw, 24px));
+    gap: 4px;
   }
 }
