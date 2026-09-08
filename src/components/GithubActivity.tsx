@@ -1,74 +1,33 @@
 "use client";
 
 import { ArrowUpRight, Github } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
 
 const USERNAME = "ashseryoja";
 const PROFILE_URL = `https://github.com/${USERNAME}`;
-const CELL_COUNT = 371;
-
-type ContributionDay = {
-  date: string;
-  count: number;
-  level: number;
-};
-
-type GithubActivityData = {
-  username: string;
-  total: number;
-  activeDays: number;
-  days: ContributionDay[];
-};
+const WEEK_COUNT = 16;
 
 const levelColors = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
 
-function formatDate(date: string) {
-  return new Intl.DateTimeFormat("en", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(new Date(`${date}T12:00:00`));
-}
+const activityRows: Array<Array<number | null>> = [
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 3, 1],
+  [2, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 2, 3, 2],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 4, 2, 1],
+  [2, 1, 2, 1, 1, 1, 1, 0, 0, 4, 3, 1, 3, 4, 2, null],
+  [1, 1, 1, 1, 1, 2, 1, 0, 1, 1, 1, 2, 3, 2, 1, null],
+  [1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 2, 3, 1, 2, 1, null],
+  [1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 2, 1, null],
+];
+
+const activityCells = activityRows.flatMap((row, rowIndex) =>
+  row.map((level, columnIndex) => ({ level, rowIndex, columnIndex })),
+);
+
+const activeDays = activityCells.filter((cell) => cell.level !== null && cell.level > 0).length;
 
 export default function GithubActivity() {
-  const [data, setData] = useState<GithubActivityData | null>(null);
-  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetch("/api/github-activity", { signal: controller.signal })
-      .then(async (response) => {
-        if (!response.ok) throw new Error("GitHub activity request failed");
-        return response.json() as Promise<GithubActivityData>;
-      })
-      .then((activity) => {
-        setData(activity);
-        setStatus("ready");
-      })
-      .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        setStatus("error");
-      });
-
-    return () => controller.abort();
-  }, []);
-
-  const dateRange = useMemo(() => {
-    if (!data?.days.length) return "Last 12 months";
-    return `${formatDate(data.days[0].date)} — ${formatDate(data.days[data.days.length - 1].date)}`;
-  }, [data]);
-
-  const cells = data?.days ?? Array.from({ length: CELL_COUNT }, (_, index) => ({
-    date: "",
-    count: 0,
-    level: 0,
-    placeholderIndex: index,
-  }));
-
   return (
     <section id="github-activity" className="pb-24 md:pb-32 reveal-section scroll-mt-24" aria-labelledby="github-activity-title">
-      <div className="mb-12">
+      <div className="mb-6 md:mb-8">
         <h2 id="github-activity-title" className="text-center font-mono text-xl uppercase tracking-widest text-white/80">
           GitHub Activity
         </h2>
@@ -91,48 +50,45 @@ export default function GithubActivity() {
                 @{USERNAME}
                 <ArrowUpRight className="h-3.5 w-3.5 text-white/35 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" aria-hidden="true" />
               </span>
-              <span className="mt-1 block text-xs text-white/35">Public contribution graph</span>
+              <span className="mt-1 block text-xs text-white/35">Contribution snapshot</span>
             </span>
           </a>
 
           <div className="flex items-end gap-8 sm:text-right">
             <div>
               <p className="font-mono text-2xl font-medium tabular-nums text-white sm:text-3xl">
-                {status === "ready" ? data?.total.toLocaleString("en-US") : "—"}
+                {WEEK_COUNT}
               </p>
-              <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">Contributions</p>
+              <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">Weeks</p>
             </div>
             <div>
               <p className="font-mono text-2xl font-medium tabular-nums text-white sm:text-3xl">
-                {status === "ready" ? data?.activeDays.toLocaleString("en-US") : "—"}
+                {activeDays}
               </p>
               <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">Active days</p>
             </div>
           </div>
         </div>
 
-        <div className="pt-6 md:pt-8">
-          <div className="overflow-x-auto pb-2 [scrollbar-color:#3f3f46_transparent] [scrollbar-width:thin]">
+        <div className="pt-4 md:pt-6">
+          <div className="pb-2">
             <div
-              className="mx-auto grid w-max grid-flow-col grid-rows-7 gap-[3px]"
+              className="mx-auto grid w-full max-w-[912px] grid-cols-[repeat(16,minmax(0,1fr))] gap-[3px] sm:gap-2"
               role="grid"
-              aria-label={status === "ready" ? `${data?.total} GitHub contributions in the last year` : "GitHub contribution calendar is loading"}
+              aria-label={`GitHub activity snapshot with ${activeDays} active days across ${WEEK_COUNT} weeks`}
             >
-              {cells.map((day, index) => (
+              {activityCells.map((cell) => (
                 <span
-                  key={day.date || index}
+                  key={`${cell.rowIndex}-${cell.columnIndex}`}
                   role="gridcell"
-                  title={day.date ? `${day.count || "No"} contribution${day.count === 1 ? "" : "s"} on ${formatDate(day.date)}` : undefined}
-                  aria-label={day.date ? `${day.count || "No"} contribution${day.count === 1 ? "" : "s"} on ${formatDate(day.date)}` : undefined}
-                  className={`block h-[13px] w-[13px] rounded-[3px] transition-transform duration-200 hover:scale-125 sm:h-[15px] sm:w-[15px] ${
-                    status === "ready" ? "" : "animate-pulse"
-                  }`}
+                  aria-label={cell.level === null ? undefined : `Week ${cell.columnIndex + 1}, day ${cell.rowIndex + 1}, activity level ${cell.level}`}
+                  aria-hidden={cell.level === null ? "true" : undefined}
+                  className={`block aspect-square min-w-0 rounded-[4px] transition-transform duration-200 hover:scale-105 sm:rounded-[6px] ${cell.level === null ? "invisible" : ""}`}
                   style={{
-                    backgroundColor: status === "ready" ? levelColors[day.level] : levelColors[0],
+                    backgroundColor: levelColors[cell.level ?? 0],
                     border: 0,
                     outline: 0,
                     boxShadow: "none",
-                    ...(status !== "ready" ? { animationDelay: `${(index % 53) * 18}ms` } : {}),
                   }}
                 />
               ))}
@@ -140,9 +96,7 @@ export default function GithubActivity() {
           </div>
 
           <div className="mt-5 flex flex-col gap-4 pt-4 text-[10px] text-white/30 sm:flex-row sm:items-center sm:justify-between">
-            <p className="font-mono uppercase tracking-[0.16em]">
-              {status === "error" ? "Live data will retry on the next visit" : dateRange}
-            </p>
+            <p className="font-mono uppercase tracking-[0.16em]">GitHub activity snapshot</p>
             <div className="flex items-center gap-2 font-mono uppercase tracking-[0.14em]" aria-label="Contribution intensity legend">
               <span>Less</span>
               {levelColors.map((color, index) => (

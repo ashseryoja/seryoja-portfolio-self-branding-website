@@ -96,7 +96,7 @@ export default function Home() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-32 pb-48 selection:bg-white selection:text-black">
 
         {/* HERO SECTION */}
-        <section className="min-h-[80vh] flex flex-col justify-center reveal-section">
+        <section className="flex min-h-[calc(100svh-8rem)] flex-col justify-center pb-16 reveal-section md:min-h-[80vh] md:pb-0">
           <h2 className="font-mono text-sm tracking-[0.3em] uppercase opacity-70 mb-4 animate-pulse">
             FULL STACK DEVELOPER · AI INTEGRATOR · AI AUTOMATION ENGINEER
           </h2>
