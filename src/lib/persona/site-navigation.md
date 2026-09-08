@@ -6,6 +6,7 @@ internal relative links so they work in production and locally.
 
 ## Main links
 - Hero / top of portfolio: /#
+- GitHub activity: /#github-activity
 - Skills grid: /#skills-section
 - All selected builds / projects: /#builds-section
 - Low-code n8n builds: /#low-code-n8n-section
@@ -38,7 +39,9 @@ internal relative links so they work in production and locally.
   HOME, Naghashyan Solutions, and NPUA, then link to /#log-section.
 - If asked about UpSound AI, mention that it is a production AI/SaaS platform for
   independent musicians with web app, Telegram bot, FastAPI backend, Supabase/Postgres,
-  AI generation pipelines, payments, analytics, and tests. Link to /#upsound-experience.
+  AI generation pipelines, payments, analytics, and tests. It attracted 1,500+
+  pre-registrations before launch and has since reached 3,000 active users and 5,000
+  users overall. Link to /#upsound-experience.
 - If asked about contact or hiring, give a concise answer and link to /contact.
 
 ## Link style

@@ -10,6 +10,9 @@ and release promotion plans. The product is not a pet project: it includes a Nex
 app, Telegram bot, FastAPI backend, PostgreSQL/Supabase data layer, background generation
 queues, admin tooling, payments, analytics, and production deploys.
 
+Before launch, UpSound AI attracted more than 1,500 pre-registrations. Since launching,
+it has grown to 3,000 active users and 5,000 users overall.
+
 Frontend stack: Next.js 15, React 19, TypeScript, App Router, Tailwind CSS, shadcn/ui,
 Radix UI, lucide-react, TanStack Query, Zustand, Axios, Supabase Auth, React Hook Form,
 Zod, Framer Motion, GSAP, Lottie, PostHog, Playwright, and ESLint.

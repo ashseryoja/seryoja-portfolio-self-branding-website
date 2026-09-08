@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import Image from "next/image";
 import { ExternalLink, X } from "lucide-react";
+import GithubActivity from "@/components/GithubActivity";
 const NetworkBackground = dynamic(() => import('@/components/NetworkBackground'), { ssr: false });
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
@@ -123,6 +124,8 @@ export default function Home() {
             </a>
           </div>
         </section>
+
+        <GithubActivity />
 
         {/* SKILLS GRID */}
         <section id="skills-section" className="min-h-screen flex flex-col justify-center py-20 reveal-section scroll-mt-24">
@@ -284,7 +287,7 @@ export default function Home() {
               <div className="relative pl-12 md:pl-0">
                 <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
                 <p className="text-neutral-300 font-light leading-relaxed mb-5">
-                  Built <span className="font-semibold text-white">UpSound AI</span>, a production AI/SaaS platform for independent musicians. The product helps artists analyze tracks, generate cover concepts, Reels scripts, playlist pitches, and release promotion plans through a Next.js web app, Telegram bot, FastAPI backend, PostgreSQL/Supabase data layer, background generation queues, and payment infrastructure.
+                  Built <span className="font-semibold text-white">UpSound AI</span>, a production AI/SaaS platform for independent musicians. The product helps artists analyze tracks, generate cover concepts, Reels scripts, playlist pitches, and release promotion plans through a Next.js web app, Telegram bot, FastAPI backend, PostgreSQL/Supabase data layer, background generation queues, and payment infrastructure. Before launch, the platform attracted 1,500+ pre-registrations; since launch, it has grown to 3,000 active users and 5,000 users overall.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
                   <div className="border border-white/10 bg-white/[0.03] p-4 rounded-sm">
