@@ -41,6 +41,7 @@ The supplied activity crop and the rendered mobile section were inspected togeth
 7. A close-up reference revealed the browser still presenting a lighter outer edge around inactive cells. Locked every cell and legend swatch to a single inline background color and explicitly disabled border, outline, and box shadow. The refreshed production preview shows uniform inactive-day fills.
 8. Mobile feedback requested a full-screen first Hero, a smaller title/profile gap, and replacement of the public 12-month GitHub response with the supplied real activity snapshot.
 9. Set the mobile Hero to the remaining small-viewport height, reduced the section-heading margin, reconstructed the supplied 16-week pattern, and removed the misleading live endpoint and totals.
+10. Desktop feedback clarified that the activity screenshot was a data reference, not a scale reference. Restored standard GitHub-like 13 px mobile and 15 px desktop cells with compact 3 px gaps while preserving the supplied pattern.
 
 ## Primary interactions and runtime checks
 

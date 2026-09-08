@@ -73,7 +73,7 @@ export default function GithubActivity() {
         <div className="pt-4 md:pt-6">
           <div className="pb-2">
             <div
-              className="mx-auto grid w-full max-w-[912px] grid-cols-[repeat(16,minmax(0,1fr))] gap-[3px] sm:gap-2"
+              className="github-activity-grid mx-auto grid w-max gap-[3px]"
               role="grid"
               aria-label={`GitHub activity snapshot with ${activeDays} active days across ${WEEK_COUNT} weeks`}
             >
@@ -83,7 +83,7 @@ export default function GithubActivity() {
                   role="gridcell"
                   aria-label={cell.level === null ? undefined : `Week ${cell.columnIndex + 1}, day ${cell.rowIndex + 1}, activity level ${cell.level}`}
                   aria-hidden={cell.level === null ? "true" : undefined}
-                  className={`block aspect-square min-w-0 rounded-[4px] transition-transform duration-200 hover:scale-105 sm:rounded-[6px] ${cell.level === null ? "invisible" : ""}`}
+                  className={`block aspect-square rounded-[3px] transition-transform duration-200 hover:scale-110 ${cell.level === null ? "invisible" : ""}`}
                   style={{
                     backgroundColor: levelColors[cell.level ?? 0],
                     border: 0,
