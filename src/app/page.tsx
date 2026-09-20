@@ -67,6 +67,32 @@ const websiteProjects = [
     accent: "from-[#7f2a93]/35 via-black/10 to-black/95",
     tags: ["Web 3D", "Configurator", "Furniture"],
   },
+  {
+    id: "upsound-ai-website",
+    name: "UpSound AI",
+    label: "AI product · 04",
+    description:
+      "An end-to-end AI platform for independent musicians — track analysis, cover concepts, Reels scenarios, playlist pitching and release planning.",
+    image: "/assets/upsound-ai-playlist-pitching.jpg",
+    imageAlt: "UpSound AI playlist pitching workspace",
+    imagePosition: "object-left",
+    href: "https://www.upsound.ai/",
+    accent: "from-[#ff334f]/20 via-black/5 to-black/95",
+    tags: ["Music tech", "AI platform", "SaaS"],
+  },
+  {
+    id: "deohome-website",
+    name: "DEO HOME",
+    label: "E-commerce · 05",
+    description:
+      "A premium furniture catalogue and commerce experience built as a fast, installable PWA, optimized for tablet sales and offline browsing.",
+    image: "/assets/pwa-portfolio.webp",
+    imageAlt: "DEO HOME furniture catalogue displayed across tablet devices",
+    imagePosition: "object-center",
+    href: "https://deohome.online/",
+    accent: "from-[#b7a690]/20 via-black/5 to-black/95",
+    tags: ["E-commerce", "PWA", "Furniture"],
+  },
 ] as const;
 
 export default function Home() {
@@ -228,12 +254,12 @@ export default function Home() {
               <h4 className="font-mono text-sm uppercase tracking-widest text-white/70">Websites &amp; digital products</h4>
             </div>
             <p className="mt-3 max-w-md text-sm font-light leading-relaxed text-neutral-500 sm:mt-0 sm:text-right">
-              Three distinct digital experiences, designed and shipped end to end.
+              Five distinct digital experiences, designed and shipped end to end.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5 mb-16">
-            {websiteProjects.map((project) => (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-6 md:gap-5 mb-16">
+            {websiteProjects.map((project, index) => (
               <a
                 key={project.id}
                 id={project.id}
@@ -241,13 +267,13 @@ export default function Home() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`Open ${project.name} website`}
-                className="group relative isolate min-h-[390px] overflow-hidden rounded-sm border border-white/10 bg-neutral-950 transition-all duration-500 hover:-translate-y-1 hover:border-white/35 focus:outline-none focus:ring-1 focus:ring-white/60 md:min-h-[440px]"
+                className={`group relative isolate min-h-[390px] overflow-hidden rounded-sm border border-white/10 bg-neutral-950 transition-all duration-500 hover:-translate-y-1 hover:border-white/35 focus:outline-none focus:ring-1 focus:ring-white/60 md:min-h-[440px] ${index < 3 ? "md:col-span-2" : "md:col-span-3"}`}
               >
                 <Image
                   src={project.image}
                   alt={project.imageAlt}
                   fill
-                  sizes="(min-width: 768px) 33vw, 100vw"
+                  sizes={index < 3 ? "(min-width: 768px) 33vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
                   className={`object-cover opacity-75 saturate-[0.8] transition-all duration-700 ease-out group-hover:scale-[1.045] group-hover:opacity-90 group-hover:saturate-100 ${project.imagePosition}`}
                 />
                 <div className={`absolute inset-0 bg-gradient-to-b ${project.accent}`} aria-hidden="true" />
