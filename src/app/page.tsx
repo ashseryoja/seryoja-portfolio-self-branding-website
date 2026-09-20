@@ -27,6 +27,48 @@ const upsoundPreviews = [
   },
 ];
 
+const websiteProjects = [
+  {
+    id: "beze-website",
+    name: "BEZE",
+    label: "Website · 01",
+    description:
+      "A multilingual digital storefront for a Yerevan pastry studio — immersive art direction, an animated catalogue and product-led navigation.",
+    image: "/assets/beze-project.webp",
+    imageAlt: "BEZE strawberry mille-feuille collection",
+    imagePosition: "object-[center_68%]",
+    href: "https://beze-delta.vercel.app/",
+    accent: "from-[#dce4cb]/25 via-black/5 to-black/95",
+    tags: ["Multilingual", "Catalogue", "Art direction"],
+  },
+  {
+    id: "dizzit-ai-website",
+    name: "Dizzit AI",
+    label: "Independent product · 02",
+    description:
+      "My product for interior designers: one workspace for render enhancement, style transfer, new views, materials, presentations and photo-to-3D.",
+    image: "/assets/dizzit-project.jpg",
+    imageAlt: "AI-generated loft interior from Dizzit AI",
+    imagePosition: "object-center",
+    href: "https://dizzit-ai.vercel.app/",
+    accent: "from-[#8b623d]/30 via-black/10 to-black/95",
+    tags: ["AI workspace", "Interior design", "SaaS"],
+  },
+  {
+    id: "three-dimension-website",
+    name: "3Dimension",
+    label: "Website · 03",
+    description:
+      "An interactive studio website for photorealistic furniture 3D — with live material configuration, web 3D and AR-ready assets.",
+    image: "/assets/three-dimension-project.jpg",
+    imageAlt: "3Dimension furniture studio website",
+    imagePosition: "object-center",
+    href: "https://three-dimension-ten.vercel.app/",
+    accent: "from-[#7f2a93]/35 via-black/10 to-black/95",
+    tags: ["Web 3D", "Configurator", "Furniture"],
+  },
+] as const;
+
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const previewModalRef = useRef<HTMLDivElement>(null);
@@ -180,62 +222,61 @@ export default function Home() {
             <div className="h-px bg-white/20 w-12"></div>
           </div>
 
-          <div id="low-code-n8n-section" className="flex items-center gap-4 mb-8 scroll-mt-24">
-            <h4 className="font-mono text-sm tracking-widest uppercase text-white/60">Low-Code (n8n)</h4>
-            <div className="h-px bg-white/10 flex-1"></div>
+          <div id="websites-section" className="mb-8 scroll-mt-24 sm:flex sm:items-end sm:justify-between sm:gap-8">
+            <div>
+              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.28em] text-white/35">Selected work · 2026</p>
+              <h4 className="font-mono text-sm uppercase tracking-widest text-white/70">Websites &amp; digital products</h4>
+            </div>
+            <p className="mt-3 max-w-md text-sm font-light leading-relaxed text-neutral-500 sm:mt-0 sm:text-right">
+              Three distinct digital experiences, designed and shipped end to end.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16">
-            <article id="ai-inventory-manager" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
-              <h4 className="text-2xl font-bold font-mono mb-3">AI Inventory Manager</h4>
-              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">OpenAI, WordPress API, Telegram</p>
-              <div className="mb-5 border border-white/10 rounded-md overflow-hidden bg-black/40">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5 mb-16">
+            {websiteProjects.map((project) => (
+              <a
+                key={project.id}
+                id={project.id}
+                href={project.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open ${project.name} website`}
+                className="group relative isolate min-h-[390px] overflow-hidden rounded-sm border border-white/10 bg-neutral-950 transition-all duration-500 hover:-translate-y-1 hover:border-white/35 focus:outline-none focus:ring-1 focus:ring-white/60 md:min-h-[440px]"
+              >
                 <Image
-                  src="/assets/ecommerce-ai-agent.png"
-                  alt="AI Inventory Manager preview"
-                  width={1200}
-                  height={700}
-                  className="w-full h-auto object-cover transition-transform duration-500 hover:scale-[1.02]"
+                  src={project.image}
+                  alt={project.imageAlt}
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className={`object-cover opacity-75 saturate-[0.8] transition-all duration-700 ease-out group-hover:scale-[1.045] group-hover:opacity-90 group-hover:saturate-100 ${project.imagePosition}`}
                 />
-              </div>
-              <p className="text-neutral-300 font-light leading-relaxed">
-                A smart Telegram bot to instantly add, update, or fetch product data via natural language.
-              </p>
-            </article>
+                <div className={`absolute inset-0 bg-gradient-to-b ${project.accent}`} aria-hidden="true" />
+                <div className="absolute inset-x-0 bottom-0 h-[72%] bg-gradient-to-t from-black via-black/80 to-transparent" aria-hidden="true" />
+                <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_25%,rgba(255,255,255,0.07)_48%,transparent_68%)] bg-[length:250%_100%] bg-[-150%_0] transition-[background-position] duration-1000 group-hover:bg-[120%_0]" aria-hidden="true" />
 
-            <article id="automated-pdf-quotes" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
-              <h4 className="text-2xl font-bold font-mono mb-3">Automated PDF Quotes</h4>
-              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">n8n, B2B Automation</p>
-              <div className="mb-5 border border-white/10 rounded-md overflow-hidden bg-black/40">
-                <Image
-                  src="/assets/pricelist-pdf-maker.png"
-                  alt="Automated PDF Quotes preview"
-                  width={1200}
-                  height={700}
-                  className="w-full h-auto object-cover transition-transform duration-500 hover:scale-[1.02]"
-                />
-              </div>
-              <p className="text-neutral-300 font-light leading-relaxed">
-                A B2B sales bot that instantly generates professional PDF proposals by extracting live product images and pricing from the database.
-              </p>
-            </article>
+                <div className="relative flex min-h-[390px] flex-col justify-between p-5 md:min-h-[440px] md:p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.22em] text-white/70 backdrop-blur-md">{project.label}</span>
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur-md transition-all duration-300 group-hover:border-white group-hover:bg-white group-hover:text-black">
+                      <ExternalLink size={14} aria-hidden="true" />
+                    </span>
+                  </div>
 
-            <article id="elevenlabs-agent-manager" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
-              <h4 className="text-2xl font-bold font-mono mb-3">ElevenLabs Agent Manager</h4>
-              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">ElevenLabs, Telegram, AI</p>
-              <div className="mb-5 border border-white/10 rounded-md overflow-hidden bg-black/40">
-                <Image
-                  src="/assets/elevenlabs-agent-manager.png"
-                  alt="ElevenLabs Agent Manager preview"
-                  width={1200}
-                  height={700}
-                  className="w-full h-auto object-cover transition-transform duration-500 hover:scale-[1.02]"
-                />
-              </div>
-              <p className="text-neutral-300 font-light leading-relaxed">
-                Your ElevenLabs account manager with integrated AI allows you to manage your agents and their data directly in the Telegram chat.
-              </p>
-            </article>
+                  <div>
+                    <div className="mb-4 h-px w-10 bg-white/50 transition-all duration-500 group-hover:w-20" aria-hidden="true" />
+                    <h5 className="mb-3 text-3xl font-semibold tracking-[-0.04em] text-white md:text-[2rem]">{project.name}</h5>
+                    <p className="mb-5 text-sm font-light leading-relaxed text-neutral-200">{project.description}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="rounded-full border border-white/15 bg-black/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-white/65 backdrop-blur-md">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
           </div>
 
           <div id="built-with-code-section" className="flex items-center gap-4 mb-8 scroll-mt-24">
