@@ -47,11 +47,11 @@ const websiteProjects = [
     label: "Independent product · 02",
     description:
       "My product for interior designers: one workspace for render enhancement, style transfer, new views, materials, presentations and photo-to-3D.",
-    image: "/assets/dizzit-project.jpg",
-    imageAlt: "AI-generated loft interior from Dizzit AI",
-    imagePosition: "object-center",
+    image: "/assets/dizzit-ui-project.webp",
+    imageAlt: "Dizzit AI interior design workspace with before-and-after render editor",
+    imagePosition: "object-top",
     href: "https://dizzit-ai.vercel.app/",
-    accent: "from-[#8b623d]/30 via-black/10 to-black/95",
+    accent: "from-[#9382ff]/20 via-black/5 to-black/95",
     tags: ["AI workspace", "Interior design", "SaaS"],
   },
   {
