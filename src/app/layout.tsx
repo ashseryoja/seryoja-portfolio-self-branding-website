@@ -3,6 +3,8 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SocialDock from "@/components/SocialDock";
 import ProfileModal from "@/components/ProfileModal";
+import LiquidBackdrop from "@/components/liquid/LiquidBackdrop";
+import SmoothScroll from "@/components/liquid/SmoothScroll";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
@@ -46,8 +48,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth overflow-x-hidden">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-black text-white font-sans overflow-x-hidden min-h-screen flex flex-col`}>
+    <html lang="en" className="scroll-smooth overflow-x-hidden" suppressHydrationWarning>
+      <head>
+        {/* Lets CSS hold hero elements for their entrance before hydration. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-[#040406] text-white font-sans overflow-x-hidden min-h-screen flex flex-col`}>
+        <LiquidBackdrop />
+        <SmoothScroll />
         <main className="flex-1 flex flex-col relative">
           {children}
         </main>

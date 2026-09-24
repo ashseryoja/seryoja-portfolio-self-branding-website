@@ -3,6 +3,15 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Terminal } from "lucide-react";
+import GlassSurface from "@/components/liquid/GlassSurface";
+
+/*
+ * Soft scroll edges so messages dissolve into the stage instead of being cut.
+ * The mask sits on the scroll area only — no GlassSurface lives inside it, so
+ * it never becomes the backdrop root for the header or the input pill.
+ */
+const SCROLL_EDGE_MASK =
+    "linear-gradient(to bottom, transparent 0, #000 20px, #000 calc(100% - 32px), transparent 100%)";
 
 type Message = {
     id: string;
@@ -188,32 +197,35 @@ export default function ChatPage() {
     return (
         <div
             ref={containerRef}
-            className="fixed left-0 w-full flex flex-col bg-black text-white overflow-hidden z-[40]"
+            className="fixed left-0 w-full flex flex-col text-white overflow-hidden z-[40]"
             style={{ height: "100dvh", top: 0 }}
         >
             {/* Background Texture */}
-            <div className="absolute inset-0 bg-[#000000] bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none z-0" />
+            <div className="absolute inset-0 pointer-events-none z-0 bg-[radial-gradient(ellipse_70%_45%_at_50%_0%,rgba(255,255,255,0.07),transparent_72%),radial-gradient(ellipse_60%_35%_at_50%_100%,rgba(255,255,255,0.05),transparent_75%)]" />
 
             {/* Header */}
-            <header className="shrink-0 relative z-10 flex items-center justify-center px-6 h-24 border-b border-white/10 bg-black/50 backdrop-blur-md">
-                <div className="flex items-center gap-3 md:ml-0">
-                    <div className="p-2 bg-white/5 rounded-lg border border-white/10">
-                        <Terminal size={18} className="text-white/70" />
+            <header className="shrink-0 relative z-10 flex items-center justify-center px-6 h-24">
+                <GlassSurface className="rounded-full py-2 pl-2 pr-5">
+                    <div className="flex items-center gap-3 md:ml-0">
+                        <div className="glass-lite p-2 rounded-full">
+                            <Terminal size={18} className="text-white/80" />
+                        </div>
+                        <div>
+                            <h1 className="font-mono text-sm font-bold tracking-tight text-white">n8n_Agent_Session</h1>
+                            <p className="text-[10px] sm:text-xs font-mono text-white/45 flex items-center gap-2">
+                                <span className="status-dot shrink-0 w-1.5 h-1.5 rounded-full bg-green-400 text-green-400/80 shadow-[0_0_8px_rgba(74,222,128,0.85)]" />
+                                System Online
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <h1 className="font-mono text-sm font-bold tracking-tight">n8n_Agent_Session</h1>
-                        <p className="text-[10px] sm:text-xs font-mono text-white/40 flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                            System Online
-                        </p>
-                    </div>
-                </div>
+                </GlassSurface>
             </header>
 
             {/* Chat Area */}
             <div
                 id="chat-scroll-area"
-                className="flex-1 overflow-y-auto overscroll-none relative z-10 p-4 sm:p-6 space-y-6 scroll-smooth"
+                className="flex-1 overflow-y-auto overscroll-none relative z-10 px-4 pt-6 pb-6 sm:px-6 sm:pt-8 sm:pb-8 space-y-6 scroll-smooth"
+                style={{ WebkitMaskImage: SCROLL_EDGE_MASK, maskImage: SCROLL_EDGE_MASK }}
             >
                 <div className="max-w-3xl mx-auto space-y-6">
                     <AnimatePresence initial={false}>
@@ -222,6 +234,7 @@ export default function ChatPage() {
                                 key={m.id}
                                 initial={{ opacity: 0, y: 10, scale: 0.98 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
+                                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                                 className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} w-full`}
                             >
                                 <div className={`flex gap-3 max-w-[85%] sm:max-w-[75%] ${m.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
@@ -229,11 +242,11 @@ export default function ChatPage() {
                                     {/* Avatar */}
                                     <div className="shrink-0 mt-1">
                                         {m.role === "user" ? (
-                                            <div className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center font-mono text-xs font-bold">
+                                            <div className="w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold text-[#08080b] bg-[linear-gradient(180deg,#ffffff_0%,#dfe2ea_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,1),0_0_0_1px_rgba(255,255,255,0.35),0_8px_18px_-10px_rgba(0,0,0,0.9)]">
                                                 U
                                             </div>
                                         ) : (
-                                            <div className="w-8 h-8 rounded-full border border-white/20 bg-black overflow-hidden relative flex items-center justify-center">
+                                            <div className="glass-lite w-8 h-8 rounded-full overflow-hidden relative flex items-center justify-center">
                                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-white/70">
                                                     <path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631" />
                                                 </svg>
@@ -242,8 +255,8 @@ export default function ChatPage() {
                                     </div>
 
                                     {/* Message Bubble */}
-                                    <div className={`px-4 py-3 rounded-2xl border flex flex-col ${m.role === "user" ? "bg-white text-black border-transparent rounded-tr-sm" : "bg-white/[0.03] border-white/10 text-white rounded-tl-sm backdrop-blur-sm"}`}>
-                                        <p className="text-sm font-sans leading-relaxed whitespace-pre-wrap">{renderMessageContent(m.content, m.role)}</p>
+                                    <div className={`px-4 py-3 rounded-[22px] flex flex-col ${m.role === "user" ? "rounded-tr-[8px] text-[#08080b] bg-[linear-gradient(180deg,rgba(255,255,255,0.97)_0%,rgba(230,232,239,0.91)_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,15,25,0.08),inset_0_0_0_1px_rgba(255,255,255,0.5),0_14px_34px_-18px_rgba(0,0,0,0.9),0_0_30px_-12px_rgba(255,255,255,0.35)]" : "glass-lite text-white rounded-tl-[8px]"}`}>
+                                        <p className={`text-sm font-sans leading-relaxed whitespace-pre-wrap ${m.role === "user" ? "" : "text-white/90"}`}>{renderMessageContent(m.content, m.role)}</p>
                                     </div>
                                 </div>
                             </motion.div>
@@ -254,18 +267,19 @@ export default function ChatPage() {
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                                 className="flex justify-start w-full"
                             >
                                 <div className="flex gap-3">
-                                    <div className="w-8 h-8 rounded-full border border-white/20 bg-black overflow-hidden shrink-0 mt-1 flex items-center justify-center">
+                                    <div className="glass-lite w-8 h-8 rounded-full overflow-hidden shrink-0 mt-1 flex items-center justify-center">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-white/40">
                                             <path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631" />
                                         </svg>
                                     </div>
-                                    <div className="px-4 py-3 sm:py-4 rounded-2xl border bg-white/[0.03] border-white/10 rounded-tl-sm flex items-center gap-1">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-[bounce_1s_infinite_0ms]"></span>
-                                        <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-[bounce_1s_infinite_150ms]"></span>
-                                        <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-[bounce_1s_infinite_300ms]"></span>
+                                    <div className="glass-lite px-4 py-3 sm:py-4 rounded-[22px] rounded-tl-[8px] flex items-center gap-1">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-white/55 animate-[bounce_1s_infinite_0ms]"></span>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-white/55 animate-[bounce_1s_infinite_150ms]"></span>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-white/55 animate-[bounce_1s_infinite_300ms]"></span>
                                     </div>
                                 </div>
                             </motion.div>
@@ -276,29 +290,35 @@ export default function ChatPage() {
             </div>
 
             {/* Input Dock */}
-            <div className="shrink-0 relative z-10 p-4 pb-28 lg:pb-32 bg-gradient-to-t from-black via-black to-transparent">
-                <form
-                    onSubmit={handleSubmit}
-                    className="max-w-3xl mx-auto relative flex items-center"
+            <div className="shrink-0 relative z-10 p-4 pb-28 lg:pb-32 bg-gradient-to-t from-[#040406]/80 via-[#040406]/35 to-transparent">
+                <GlassSurface
+                    tone="dark"
+                    interactive
+                    className="max-w-3xl mx-auto rounded-full focus-within:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_0_40px_-10px_rgba(255,255,255,0.3),0_30px_70px_-32px_rgba(0,0,0,0.85),0_10px_24px_-14px_rgba(0,0,0,0.6)]"
                 >
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Initialize command..."
-                        disabled={isLoading}
-                        className="w-full bg-white/[0.05] border border-white/10 focus:border-white/30 rounded-full py-4 pl-6 pr-14 text-base sm:text-sm font-sans text-white placeholder:text-white/30 focus:outline-none focus:ring-1 focus:ring-white/20 transition-all disabled:opacity-50 backdrop-blur-md shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.5)]"
-                    />
-                    <button
-                        type="submit"
-                        disabled={!input.trim() || isLoading}
-                        aria-label="Send message"
-                        title="Send message"
-                        className="absolute right-2 p-2 bg-white text-black rounded-full hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center"
+                    <form
+                        onSubmit={handleSubmit}
+                        className="max-w-3xl mx-auto relative flex items-center"
                     >
-                        <Send size={18} className="translate-x-[1px] -translate-y-[1px]" />
-                    </button>
-                </form>
+                        <input
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Initialize command..."
+                            disabled={isLoading}
+                            className="w-full bg-transparent border-0 rounded-full py-4 pl-6 pr-14 text-base sm:text-sm font-sans text-white caret-white placeholder:text-white/35 focus:outline-none focus:ring-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:opacity-50 disabled:cursor-not-allowed"
+                        />
+                        <button
+                            type="submit"
+                            disabled={!input.trim() || isLoading}
+                            aria-label="Send message"
+                            title="Send message"
+                            className="absolute right-2 w-10 h-10 rounded-full flex items-center justify-center text-[#08080b] bg-[linear-gradient(180deg,#ffffff_0%,#e3e6ee_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,15,25,0.1),0_0_0_1px_rgba(255,255,255,0.3),0_8px_20px_-8px_rgba(0,0,0,0.85)] transition-[transform,opacity,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 enabled:hover:shadow-[inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(15,15,25,0.1),0_0_0_1px_rgba(255,255,255,0.45),0_0_22px_-4px_rgba(255,255,255,0.55),0_8px_20px_-8px_rgba(0,0,0,0.85)] active:scale-95 active:duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b10] disabled:opacity-40 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                        >
+                            <Send size={18} className="translate-x-[1px] -translate-y-[1px]" />
+                        </button>
+                    </form>
+                </GlassSurface>
             </div>
         </div>
     );

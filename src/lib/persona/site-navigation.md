@@ -10,7 +10,6 @@ internal relative links so they work in production and locally.
 - Skills grid: /#skills-section
 - All selected builds / projects: /#builds-section
 - Low-code n8n builds: /#low-code-n8n-section
-- Built with Code projects: /#built-with-code-section
 - Work history / The Log: /#log-section
 - UpSound AI experience: /#upsound-experience
 - DEO HOME experience: /#deo-home-experience
@@ -23,8 +22,6 @@ internal relative links so they work in production and locally.
 - AI Inventory Manager: /#ai-inventory-manager
 - Automated PDF Quotes: /#automated-pdf-quotes
 - ElevenLabs Agent Manager: /#elevenlabs-agent-manager
-- Logistics & Order Management Dashboard: /#logistics-dashboard
-- OpenClaw DevOps Agent: /#openclaw-devops-agent
 
 ## How to answer common questions
 - If asked about skills, summarize Frontend, Backend & Automation, and AI & LLM Tools,

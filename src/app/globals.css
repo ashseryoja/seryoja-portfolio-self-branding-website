@@ -4,8 +4,20 @@
 
 @layer base {
   :root {
-    --background: #000000;
+    --background: #040406;
     --foreground: #ffffff;
+
+    /* Liquid glass material */
+    --glass-fill: linear-gradient(180deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.022) 100%);
+    --glass-veil: rgba(9, 9, 13, 0.34);
+    --glass-rim-strong: rgba(255, 255, 255, 0.62);
+    --glass-rim-soft: rgba(255, 255, 255, 0.05);
+    --glass-shadow: 0 30px 70px -32px rgba(0, 0, 0, 0.85), 0 10px 24px -14px rgba(0, 0, 0, 0.6);
+    --ease-liquid: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html {
+    background: var(--background);
   }
 }
 
@@ -13,6 +25,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: var(--font-inter), sans-serif;
+  font-feature-settings: "ss01", "cv11";
 }
 
 /* Custom Selection Color */
@@ -21,32 +34,369 @@ body {
   color: #000000;
 }
 
-/* Scrollbar styles to match Noir theme */
+/* Glass scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: #040406;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: rgba(255, 255, 255, 0.14);
+  border: 3px solid #040406;
+  border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.4);
 }
 
-/* Base interactive transitions */
-.invert-hover {
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* ------------------------------------------------------------------ */
+/* Lenis smooth scroll                                                 */
+/* ------------------------------------------------------------------ */
+
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
-.invert-hover:hover {
-  background-color: #ffffff;
-  color: #000000;
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Liquid glass surfaces                                               */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+  /*
+   * `.lg-surface` sits on the <Glass> material wrapper. The library owns the
+   * backdrop (blur + saturate + SVG refraction in Chromium) and a thin inset
+   * rim; these layers add the tint, the angled specular border and the
+   * pointer-following light.
+   */
+  .lg-surface {
+    position: relative;
+    isolation: isolate;
+    background: var(--glass-fill), var(--glass-veil);
+    box-shadow: var(--glass-shadow);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    backdrop-filter: blur(16px) saturate(1.5);
+    transition:
+      background-color 0.5s var(--ease-liquid),
+      box-shadow 0.5s var(--ease-liquid),
+      transform 0.6s var(--ease-liquid);
+  }
+
+  /* Frost-only surfaces reproduce the library's inset rim themselves. */
+  .lg-surface[data-refract="false"] {
+    box-shadow:
+      var(--glass-shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.34),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .lg-surface[data-refract="false"][data-tone="dark"] {
+    -webkit-backdrop-filter: blur(26px) saturate(1.35);
+    backdrop-filter: blur(26px) saturate(1.35);
+  }
+
+  /* Clear glass: barely frosted, vivid, with a thick-edged rim of light. */
+  .lg-surface[data-refract="false"][data-tone="clear"] {
+    -webkit-backdrop-filter: blur(7px) saturate(1.9) brightness(1.06);
+    backdrop-filter: blur(7px) saturate(1.9) brightness(1.06);
+    box-shadow:
+      var(--glass-shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 -1px 1px rgba(255, 255, 255, 0.1),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+      inset 0 0 18px rgba(255, 255, 255, 0.05);
+  }
+
+  .lg-surface[data-refract="false"][data-tone="bright"] {
+    -webkit-backdrop-filter: blur(10px) saturate(1.3);
+    backdrop-filter: blur(10px) saturate(1.3);
+    box-shadow:
+      0 18px 40px -18px rgba(255, 255, 255, 0.35),
+      0 10px 24px -14px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 1),
+      inset 0 -2px 6px rgba(120, 130, 160, 0.25),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  }
+
+  .lg-surface[data-tone="clear"] {
+    --glass-fill: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+    --glass-veil: rgba(10, 10, 14, 0.12);
+  }
+
+  .lg-surface[data-tone="dark"] {
+    --glass-fill: linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.015) 100%);
+    --glass-veil: rgba(6, 6, 9, 0.56);
+  }
+
+  .lg-surface[data-tone="bright"] {
+    --glass-fill: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(226, 229, 238, 0.8) 100%);
+    --glass-veil: rgba(255, 255, 255, 0.06);
+    --glass-rim-strong: rgba(255, 255, 255, 1);
+    --glass-rim-soft: rgba(255, 255, 255, 0.35);
+    color: #050507;
+  }
+
+  /* Angled specular border — bright top-left, faint bounce bottom-right. */
+  .lg-surface::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      var(--glass-rim-strong) 0%,
+      rgba(255, 255, 255, 0.16) 18%,
+      var(--glass-rim-soft) 42%,
+      var(--glass-rim-soft) 62%,
+      rgba(255, 255, 255, 0.22) 88%,
+      rgba(255, 255, 255, 0.34) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    opacity: 0.85;
+    transition: opacity 0.5s var(--ease-liquid);
+  }
+
+  /* Pointer light that follows the cursor across the glass. */
+  .lg-surface::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+      radial-gradient(
+        520px circle at var(--lg-x, 50%) var(--lg-y, -20%),
+        rgba(255, 255, 255, 0.12),
+        rgba(255, 255, 255, 0.03) 32%,
+        transparent 60%
+      );
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-liquid);
+  }
+
+  .lg-surface[data-interactive="true"]:hover::after,
+  .lg-surface[data-interactive="true"]:focus-within::after {
+    opacity: 1;
+  }
+
+  .lg-surface[data-interactive="true"]:hover::before,
+  .lg-surface[data-interactive="true"]:focus-within::before {
+    opacity: 1;
+  }
+
+  .lg-surface[data-tone="bright"]::after {
+    background: radial-gradient(
+      240px circle at var(--lg-x, 50%) var(--lg-y, -20%),
+      rgba(255, 255, 255, 0.9),
+      transparent 60%
+    );
+  }
+
+  .lg-surface > .lg-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Lightweight glass for elements nested inside a glass surface. */
+  .glass-lite {
+    position: relative;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.018));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+    transition:
+      background 0.45s var(--ease-liquid),
+      box-shadow 0.45s var(--ease-liquid),
+      transform 0.45s var(--ease-liquid);
+  }
+
+  .glass-lite-hover:hover,
+  .glass-lite-hover:focus-visible {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.035));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.24),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+      0 14px 30px -18px rgba(0, 0, 0, 0.9);
+  }
+
+  /* Smoked chip used over photography — stays legible on light images. */
+  .glass-chip {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.02)),
+      rgba(12, 12, 16, 0.42);
+    -webkit-backdrop-filter: blur(14px) saturate(1.6);
+    backdrop-filter: blur(14px) saturate(1.6);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.32),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+      0 8px 20px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Liquid pill buttons */
+  .lg-press {
+    transition: transform 0.5s var(--ease-liquid);
+  }
+
+  .lg-press:hover {
+    transform: translateY(-2px);
+  }
+
+  .lg-press:active {
+    transform: translateY(0) scale(0.97);
+    transition-duration: 0.12s;
+  }
+
+  /* Chrome / silver display type */
+  .text-chrome {
+    background-image: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #d9dbe2 18%,
+      #7c7f8c 42%,
+      #f4f5f8 58%,
+      #8c8f9b 78%,
+      #4a4c55 100%
+    );
+    background-size: 220% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: chrome-sheen 9s var(--ease-liquid) infinite alternate;
+  }
+
+
+
+  /* Gradient hairlines for section headings */
+  .hairline-l {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28));
+  }
+
+  .hairline-r {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.28), transparent);
+  }
+
+  /* Live status dot */
+  .status-dot {
+    position: relative;
+  }
+
+  .status-dot::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    opacity: 0;
+    animation: status-ping 2.4s var(--ease-liquid) infinite;
+  }
+}
+
+@keyframes chrome-sheen {
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes status-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Backdrop                                                            */
+/* ------------------------------------------------------------------ */
+
+.lg-aurora {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(38% 42% at 78% 22%, rgba(76, 110, 255, 0.2), transparent 70%),
+    radial-gradient(34% 40% at 18% 70%, rgba(120, 82, 235, 0.14), transparent 70%),
+    radial-gradient(30% 34% at 60% 88%, rgba(34, 211, 238, 0.08), transparent 70%),
+    radial-gradient(26% 30% at 30% 18%, rgba(255, 120, 170, 0.05), transparent 70%);
+  filter: blur(20px);
+  animation: aurora-drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(2%, 2%, 0) scale(1.08);
+  }
+}
+
+.lg-dots {
+  position: absolute;
+  inset: -32px 0 -32px 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1.4px);
+  background-size: 28px 28px;
+  will-change: transform;
+}
+
+.lg-dots-mask {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 40%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(ellipse 85% 75% at 50% 40%, #000 30%, transparent 100%);
+}
+
+.lg-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 50% 0%, transparent 55%, rgba(4, 4, 6, 0.7) 100%),
+    linear-gradient(180deg, transparent 60%, rgba(4, 4, 6, 0.55) 100%);
+}
+
+.lg-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ------------------------------------------------------------------ */
+/* GitHub activity                                                     */
+/* ------------------------------------------------------------------ */
 
 .github-activity-grid {
   grid-template-columns: repeat(16, 15px);
@@ -57,5 +407,103 @@ body {
   .github-activity-grid {
     grid-template-columns: repeat(16, clamp(19px, 2vw, 24px));
     gap: 4px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Entrance                                                            */
+/* ------------------------------------------------------------------ */
+
+/* Held until GSAP plays the intro; the delayed fallback guarantees the
+   hero never stays hidden if scripts stall. */
+.js [data-intro] {
+  opacity: 0;
+  animation: lg-intro-fallback 0.01s linear 3.2s forwards;
+}
+
+@keyframes lg-intro-fallback {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Title lines wait below their masks, then rise (GSAP writes inline). */
+.js [data-intro-line] {
+  transform: translate3d(0, 115%, 0);
+  animation: lg-line-fallback 0.01s linear 3.2s forwards;
+}
+
+@keyframes lg-line-fallback {
+  to {
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Experience rail                                                     */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+  .timeline-node {
+    background: #040406;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition:
+      box-shadow 0.7s var(--ease-liquid),
+      background 0.7s var(--ease-liquid),
+      transform 0.5s var(--ease-liquid);
+  }
+
+  .timeline-node::after {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: 999px;
+    background: #ffffff;
+    opacity: 0;
+    transform: scale(0.4);
+    transition:
+      opacity 0.7s var(--ease-liquid),
+      transform 0.7s var(--ease-liquid);
+  }
+
+  .timeline-node.is-lit {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.85),
+      0 0 22px 2px rgba(255, 255, 255, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  .timeline-node.is-lit::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion preferences                                                  */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .text-chrome,
+  .lg-aurora,
+  .status-dot::after {
+    animation: none;
+  }
+
+  .lg-press:hover {
+    transform: none;
+  }
+
+  .js [data-intro] {
+    opacity: 1;
+    animation: none;
+  }
+
+  .js [data-intro-line] {
+    transform: none;
+    animation: none;
   }
 }

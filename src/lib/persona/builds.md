@@ -15,17 +15,3 @@ product images and pricing from the database.
 *ElevenLabs, Telegram, AI*
 An ElevenLabs account manager with integrated AI that lets you manage your agents and
 their data directly in a Telegram chat.
-
-## Built with Code
-
-### Logistics & Order Management Dashboard
-*Claude Code CLI, Supabase, RetailCRM, Vercel*
-A mini-dashboard to manage orders, furniture production, and truck logistics. Includes
-complex automated workflows for dynamic SKU generation, e-commerce price list creation,
-and live data synchronization.
-
-### OpenClaw DevOps Agent
-*Docker, OpenClaw, Shell, LLM APIs*
-An autonomous DevOps agent that deploys an open-source AI gateway. Automates
-infrastructure setup including Docker Compose orchestration, secure environment variable
-provisioning, and custom AI personality configuration.

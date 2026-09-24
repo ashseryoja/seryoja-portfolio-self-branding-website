@@ -1,13 +1,23 @@
 "use client";
 
-import dynamic from 'next/dynamic';
 import Image from "next/image";
-import { ExternalLink, X } from "lucide-react";
+import {
+  ArrowDownRight,
+  BrainCircuit,
+  Download,
+  ExternalLink,
+  MonitorSmartphone,
+  Workflow,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import GithubActivity from "@/components/GithubActivity";
-const NetworkBackground = dynamic(() => import('@/components/NetworkBackground'), { ssr: false });
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ProjectShowcase from "@/components/ProjectShowcase";
+import GlassSurface from "@/components/liquid/GlassSurface";
+import HeroLens from "@/components/liquid/HeroLens";
+import { scrollToId } from "@/components/liquid/SmoothScroll";
+import { useLiquidMotion } from "@/components/liquid/useLiquidMotion";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const upsoundPreviews = [
   {
@@ -27,108 +37,67 @@ const upsoundPreviews = [
   },
 ];
 
-const websiteProjects = [
-  {
-    id: "beze-website",
-    name: "BEZE",
-    label: "Website · 01",
-    description:
-      "A multilingual digital storefront for a Yerevan pastry studio — immersive art direction, an animated catalogue and product-led navigation.",
-    image: "/assets/beze-project.webp",
-    imageAlt: "BEZE strawberry mille-feuille collection",
-    imagePosition: "object-[center_68%]",
-    href: "https://beze-delta.vercel.app/",
-    accent: "from-[#dce4cb]/25 via-black/5 to-black/95",
-    tags: ["Multilingual", "Catalogue", "Art direction"],
-  },
-  {
-    id: "dizzit-ai-website",
-    name: "Dizzit AI",
-    label: "Independent product · 02",
-    description:
-      "My product for interior designers: one workspace for render enhancement, style transfer, new views, materials, presentations and photo-to-3D.",
-    image: "/assets/dizzit-ui-project.webp",
-    imageAlt: "Dizzit AI interior design workspace with before-and-after render editor",
-    imagePosition: "object-top",
-    href: "https://dizzit-ai.vercel.app/",
-    accent: "from-[#9382ff]/20 via-black/5 to-black/95",
-    tags: ["AI workspace", "Interior design", "SaaS"],
-  },
-  {
-    id: "three-dimension-website",
-    name: "3Dimension",
-    label: "Website · 03",
-    description:
-      "An interactive studio website for photorealistic furniture 3D — with live material configuration, web 3D and AR-ready assets.",
-    image: "/assets/three-dimension-project.jpg",
-    imageAlt: "3Dimension furniture studio website",
-    imagePosition: "object-center",
-    href: "https://three-dimension-ten.vercel.app/",
-    accent: "from-[#7f2a93]/35 via-black/10 to-black/95",
-    tags: ["Web 3D", "Configurator", "Furniture"],
-  },
-  {
-    id: "upsound-ai-website",
-    name: "UpSound AI",
-    label: "AI product · 04",
-    description:
-      "An end-to-end AI platform for independent musicians — track analysis, cover concepts, Reels scenarios, playlist pitching and release planning.",
-    image: "/assets/upsound-ai-playlist-pitching.jpg",
-    imageAlt: "UpSound AI playlist pitching workspace",
-    imagePosition: "object-left",
-    href: "https://www.upsound.ai/",
-    accent: "from-[#ff334f]/20 via-black/5 to-black/95",
-    tags: ["Music tech", "AI platform", "SaaS"],
-  },
-  {
-    id: "deohome-website",
-    name: "DEO HOME",
-    label: "E-commerce · 05",
-    description:
-      "A premium furniture catalogue and commerce experience built as a fast, installable PWA, optimized for tablet sales and offline browsing.",
-    image: "/assets/pwa-portfolio.webp",
-    imageAlt: "DEO HOME furniture catalogue displayed across tablet devices",
-    imagePosition: "object-center",
-    href: "https://deohome.online/",
-    accent: "from-[#b7a690]/20 via-black/5 to-black/95",
-    tags: ["E-commerce", "PWA", "Furniture"],
-  },
-] as const;
+function SectionHeading({ title }: { title: string }) {
+  return (
+    <div className="mb-12 flex items-center gap-4">
+      <div data-reveal className="hairline-l h-px flex-1" />
+      <GlassSurface
+        data-reveal
+        tone="clear"
+        display="inline-flex"
+        className="shrink-0 rounded-full"
+        contentClassName="px-5 py-2.5 sm:px-6"
+      >
+        <h3 className="font-mono text-sm uppercase tracking-[0.28em] text-white/90 sm:text-lg">{title}</h3>
+      </GlassSurface>
+      <div data-reveal className="hairline-r h-px w-12" />
+    </div>
+  );
+}
+
+function SkillCard({ title, icon: Icon, parallax, children }: { title: string; icon: LucideIcon; parallax: number; children: ReactNode }) {
+  return (
+    <div data-parallax={parallax}>
+      <GlassSurface data-reveal interactive className="group h-full rounded-[28px] p-8" contentClassName="h-full">
+        <div className="mb-6 flex items-center justify-between gap-4 border-b border-white/10 pb-4">
+          <h4 className="text-2xl font-bold font-mono">{title}</h4>
+          <span className="glass-lite grid h-10 w-10 shrink-0 place-items-center rounded-full text-white/70 transition-colors duration-500 group-hover:text-white">
+            <Icon size={17} strokeWidth={1.6} aria-hidden="true" />
+          </span>
+        </div>
+        <ul className="space-y-4 font-light text-lg text-white/80">{children}</ul>
+      </GlassSurface>
+    </div>
+  );
+}
+
+function SkillItem({ children }: { children: ReactNode }) {
+  return (
+    <li className="flex items-center gap-3">
+      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-white/80 shadow-[0_0_10px_2px_rgba(255,255,255,0.45)] transition-transform duration-500 group-hover:scale-125" />{" "}
+      <span>{children}</span>
+    </li>
+  );
+}
+
+function RailNode() {
+  return (
+    <div
+      data-timeline-node
+      className="timeline-node absolute left-[-2.25rem] top-2 z-10 h-4 w-4 rounded-full group-hover:scale-125 md:left-[-2.5rem]"
+    />
+  );
+}
+
+const pillLink =
+  "glass-lite glass-lite-hover lg-press flex items-center gap-2 rounded-full px-3.5 py-1.5 font-mono text-xs text-white/85 hover:text-white focus:outline-none focus-visible:ring-1 focus-visible:ring-white/60";
 
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const previewModalRef = useRef<HTMLDivElement>(null);
-  const [isMounted, setIsMounted] = useState(false);
   const [selectedPreview, setSelectedPreview] = useState<(typeof upsoundPreviews)[number] | null>(null);
 
-  useEffect(() => {
-    setIsMounted(true);
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Kinetic Reveal for sections
-    const sections = gsap.utils.toArray<HTMLElement>('.reveal-section');
-    sections.forEach((section) => {
-      gsap.fromTo(section,
-        { opacity: 0, y: 50, skewY: 5 },
-        {
-          opacity: 1,
-          y: 0,
-          skewY: 0,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
-    };
-  }, []);
+  useLiquidMotion(containerRef);
 
   useEffect(() => {
     if (!selectedPreview) return;
@@ -158,223 +127,178 @@ export default function Home() {
 
   return (
     <div ref={containerRef} className="relative min-h-screen text-white bg-transparent">
-      {isMounted ? <NetworkBackground /> : null}
-
       {/* Content Overlay */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-32 pb-48 selection:bg-white selection:text-black">
 
         {/* HERO SECTION */}
-        <section className="flex min-h-[calc(100svh-8rem)] flex-col justify-center pb-16 reveal-section md:min-h-[80vh] md:pb-0">
-          <h2 className="font-mono text-sm tracking-[0.3em] uppercase opacity-70 mb-4 animate-pulse">
-            FULL STACK DEVELOPER · AI INTEGRATOR · AI AUTOMATION ENGINEER
-          </h2>
-          <h1 className="text-[12vw] sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9] hover:animate-glitch transition-all cursor-default break-words">
-            SERGEY<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-neutral-600">ASHUGHYAN</span>
-          </h1>
-          <p className="max-w-2xl text-xl font-light leading-relaxed text-neutral-400 mb-8">
-            I build AI integrations and automation systems that connect products, data, teams, and business workflows.<br />
-            From idea to production: interfaces, APIs, agents, payments, and deployment.
-          </p>
-          <div className="flex flex-wrap items-center gap-4">
-            <button
-              onClick={() => document.getElementById('builds-section')?.scrollIntoView({ behavior: 'smooth' })}
-              className="inline-flex items-center justify-center px-6 py-3 border border-white/20 bg-transparent hover:bg-white hover:text-black font-mono text-sm uppercase tracking-wider transition-all duration-300 w-fit text-center"
+        <section data-hero className="flex min-h-[calc(100svh-8rem)] flex-col justify-center pb-16 md:min-h-[80vh] md:pb-0">
+          <div data-hero-drift="0.55" className="mb-6">
+            <GlassSurface
+              data-intro
+              tone="clear"
+              display="inline-flex"
+              className="max-w-full rounded-[18px] sm:rounded-full"
+              contentClassName="flex items-center gap-3 px-4 py-2.5"
             >
-              View Projects
-            </button>
-            <a
-              href="/cv/Sergey_Ashughyan_CV.pdf"
-              download="Sergey_Ashughyan_CV.pdf"
-              className="inline-flex items-center justify-center px-6 py-3 border border-white/20 bg-white/5 hover:bg-white hover:text-black font-mono text-sm uppercase tracking-wider transition-all duration-300 w-fit text-center"
-            >
-              Download CV
-            </a>
+              <span className="status-dot h-1.5 w-1.5 shrink-0 rounded-full bg-[#e8e8ec] text-[#e8e8ec] shadow-[0_0_10px_rgba(255,255,255,0.9)]" aria-hidden="true" />
+              <h2 className="font-mono text-[10px] uppercase leading-relaxed tracking-[0.18em] text-white/80 sm:text-xs sm:tracking-[0.3em]">
+                FULL STACK DEVELOPER · AI INTEGRATOR · AI AUTOMATION ENGINEER
+              </h2>
+            </GlassSurface>
+          </div>
+
+          <HeroLens className="mb-8 w-fit max-w-full">
+            <h1 className="text-[12vw] sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.9] cursor-default break-words">
+              <span className="block overflow-hidden pb-[0.05em]">
+                <span data-intro-line className="block">SERGEY</span>
+              </span>
+              <span className="block overflow-hidden pb-[0.07em]">
+                <span data-intro-line className="block text-chrome">ASHUGHYAN</span>
+              </span>
+            </h1>
+          </HeroLens>
+
+          <div data-hero-drift="0.3">
+            <p data-intro className="max-w-2xl text-lg sm:text-xl font-light leading-relaxed text-white/60 mb-8 sm:mb-10">
+              I build AI integrations and automation systems that connect products, data, teams, and business workflows.<br />
+              From idea to production: interfaces, APIs, agents, payments, and deployment.
+            </p>
+          </div>
+
+          <div data-hero-drift="0.16" className="flex flex-wrap items-center gap-3 sm:gap-4">
+            <GlassSurface data-intro tone="bright" display="inline-flex" interactive className="lg-press rounded-full">
+              <button
+                onClick={() => scrollToId("builds-section")}
+                className="inline-flex items-center justify-center gap-2 rounded-full px-[18px] py-3 font-mono text-xs uppercase tracking-wider w-fit text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:gap-2.5 sm:px-7 sm:py-3.5 sm:text-sm"
+              >
+                View Projects
+                <ArrowDownRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
+              </button>
+            </GlassSurface>
+            <GlassSurface data-intro tone="clear" display="inline-flex" interactive className="lg-press rounded-full">
+              <a
+                href="/cv/Sergey_Ashughyan_CV.pdf"
+                download="Sergey_Ashughyan_CV.pdf"
+                className="inline-flex items-center justify-center gap-2 rounded-full px-[18px] py-3 font-mono text-xs uppercase tracking-wider text-white w-fit text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:gap-2.5 sm:px-7 sm:py-3.5 sm:text-sm"
+              >
+                Download CV
+                <Download className="h-3.5 w-3.5 sm:h-[15px] sm:w-[15px]" aria-hidden="true" />
+              </a>
+            </GlassSurface>
           </div>
         </section>
 
         <GithubActivity />
 
         {/* SKILLS GRID */}
-        <section id="skills-section" className="min-h-screen flex flex-col justify-center py-20 reveal-section scroll-mt-24">
-          <div className="flex items-center gap-4 mb-12">
-            <div className="h-px bg-white/20 flex-1"></div>
-            <h3 className="font-mono text-xl tracking-widest uppercase text-white/80">The Skills Grid</h3>
-            <div className="h-px bg-white/20 w-12"></div>
-          </div>
+        <section id="skills-section" className="min-h-screen flex flex-col justify-center py-20 scroll-mt-24">
+          <SectionHeading title="The Skills Grid" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="border border-white/10 p-8 rounded-sm hover:border-white/40 transition-colors group invert-hover">
-              <h4 className="text-2xl font-bold mb-6 font-mono border-b border-white/10 pb-4 group-hover:border-black/20">Frontend</h4>
-              <ul className="space-y-4 font-light text-lg">
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Production AI/SaaS Interfaces</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> React.js & Next.js</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> JavaScript / TypeScript</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Design Systems & Product UX</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> PWA & WebGL (Three.js / GSAP)</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Analytics & User Tracking</li>
-              </ul>
-            </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            <SkillCard title="Frontend" icon={MonitorSmartphone} parallax={0.18}>
+              <SkillItem>Production AI/SaaS Interfaces</SkillItem>
+              <SkillItem>React.js &amp; Next.js</SkillItem>
+              <SkillItem>JavaScript / TypeScript</SkillItem>
+              <SkillItem>Design Systems &amp; Product UX</SkillItem>
+              <SkillItem>PWA &amp; WebGL (Three.js / GSAP)</SkillItem>
+              <SkillItem>Analytics &amp; User Tracking</SkillItem>
+            </SkillCard>
 
-            <div className="border border-white/10 p-8 rounded-sm hover:border-white/40 transition-colors group invert-hover">
-              <h4 className="text-2xl font-bold mb-6 font-mono border-b border-white/10 pb-4 group-hover:border-black/20">Backend & Automation</h4>
-              <ul className="space-y-4 font-light text-lg">
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> <strong>n8n</strong> (Low-Code AI Automation)</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> API Integrations & Automation Architecture</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> FastAPI, Workers, Queues & Schedulers</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Telegram Bots & Product Flows</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Payments, Subscriptions & Webhooks</li>
-              </ul>
-            </div>
+            <SkillCard title="Backend & Automation" icon={Workflow} parallax={0.36}>
+              <SkillItem><strong className="font-semibold text-white">n8n</strong> (Low-Code AI Automation)</SkillItem>
+              <SkillItem>API Integrations &amp; Automation Architecture</SkillItem>
+              <SkillItem>FastAPI, Workers, Queues &amp; Schedulers</SkillItem>
+              <SkillItem>Telegram Bots &amp; Product Flows</SkillItem>
+              <SkillItem>Payments, Subscriptions &amp; Webhooks</SkillItem>
+            </SkillCard>
 
-            <div className="border border-white/10 p-8 rounded-sm hover:border-white/40 transition-colors group invert-hover">
-              <h4 className="text-2xl font-bold mb-6 font-mono border-b border-white/10 pb-4 group-hover:border-black/20">AI & LLM Tools</h4>
-              <ul className="space-y-4 font-light text-lg">
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> AI Product Integration</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Multi-Provider LLM Orchestration</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> RAG, pgvector & CLIP Embeddings</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> AI Usage & Cost Tracking</li>
-                <li className="flex items-center gap-3"><span className="w-2 h-2 rounded-full bg-white group-hover:bg-black transition-colors"></span> Agent Pipelines & Tooling</li>
-              </ul>
-            </div>
+            <SkillCard title="AI & LLM Tools" icon={BrainCircuit} parallax={0.18}>
+              <SkillItem>AI Product Integration</SkillItem>
+              <SkillItem>Multi-Provider LLM Orchestration</SkillItem>
+              <SkillItem>RAG, pgvector &amp; CLIP Embeddings</SkillItem>
+              <SkillItem>AI Usage &amp; Cost Tracking</SkillItem>
+              <SkillItem>Agent Pipelines &amp; Tooling</SkillItem>
+            </SkillCard>
           </div>
         </section>
 
         {/* THE BUILDS / PROJECTS */}
-        <section id="builds-section" className="py-20 reveal-section scroll-mt-24">
-          <div className="flex items-center gap-4 mb-12">
-            <div className="h-px bg-white/20 flex-1"></div>
-            <h3 className="font-mono text-xl tracking-widest uppercase text-white/80">The Builds</h3>
-            <div className="h-px bg-white/20 w-12"></div>
-          </div>
+        <section id="builds-section" className="py-20 scroll-mt-24">
+          <SectionHeading title="The Builds" />
 
           <div id="websites-section" className="mb-8 scroll-mt-24 sm:flex sm:items-end sm:justify-between sm:gap-8">
-            <div>
-              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.28em] text-white/35">Selected work · 2026</p>
-              <h4 className="font-mono text-sm uppercase tracking-widest text-white/70">Websites &amp; digital products</h4>
+            <div data-reveal>
+              <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.28em] text-white/55">Selected work · 2026</p>
+              <h4 className="font-mono text-sm uppercase tracking-widest text-white/80">Websites &amp; digital products</h4>
             </div>
-            <p className="mt-3 max-w-md text-sm font-light leading-relaxed text-neutral-500 sm:mt-0 sm:text-right">
+            <p data-reveal className="mt-3 max-w-md text-sm font-light leading-relaxed text-white/50 sm:mt-0 sm:text-right">
               Five distinct digital experiences, designed and shipped end to end.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-6 md:gap-5 mb-16">
-            {websiteProjects.map((project, index) => (
-              <a
-                key={project.id}
-                id={project.id}
-                href={project.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`Open ${project.name} website`}
-                className={`group relative isolate min-h-[390px] overflow-hidden rounded-sm border border-white/10 bg-neutral-950 transition-all duration-500 hover:-translate-y-1 hover:border-white/35 focus:outline-none focus:ring-1 focus:ring-white/60 md:min-h-[440px] ${index < 3 ? "md:col-span-2" : "md:col-span-3"}`}
-              >
-                <Image
-                  src={project.image}
-                  alt={project.imageAlt}
-                  fill
-                  sizes={index < 3 ? "(min-width: 768px) 33vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
-                  className={`object-cover opacity-75 saturate-[0.8] transition-all duration-700 ease-out group-hover:scale-[1.045] group-hover:opacity-90 group-hover:saturate-100 ${project.imagePosition}`}
-                />
-                <div className={`absolute inset-0 bg-gradient-to-b ${project.accent}`} aria-hidden="true" />
-                <div className="absolute inset-x-0 bottom-0 h-[72%] bg-gradient-to-t from-black via-black/80 to-transparent" aria-hidden="true" />
-                <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_25%,rgba(255,255,255,0.07)_48%,transparent_68%)] bg-[length:250%_100%] bg-[-150%_0] transition-[background-position] duration-1000 group-hover:bg-[120%_0]" aria-hidden="true" />
-
-                <div className="relative flex min-h-[390px] flex-col justify-between p-5 md:min-h-[440px] md:p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <span className="rounded-full border border-white/10 bg-black/25 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.22em] text-white/70 backdrop-blur-md">{project.label}</span>
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-black/20 text-white backdrop-blur-md transition-all duration-300 group-hover:border-white group-hover:bg-white group-hover:text-black">
-                      <ExternalLink size={14} aria-hidden="true" />
-                    </span>
-                  </div>
-
-                  <div>
-                    <div className="mb-4 h-px w-10 bg-white/50 transition-all duration-500 group-hover:w-20" aria-hidden="true" />
-                    <h5 className="mb-3 text-3xl font-semibold tracking-[-0.04em] text-white md:text-[2rem]">{project.name}</h5>
-                    <p className="mb-5 text-sm font-light leading-relaxed text-neutral-200">{project.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <span key={tag} className="rounded-full border border-white/15 bg-black/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-white/65 backdrop-blur-md">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-
-          <div id="built-with-code-section" className="flex items-center gap-4 mb-8 scroll-mt-24">
-            <h4 className="font-mono text-sm tracking-widest uppercase text-white/60">Built with Code</h4>
-            <div className="h-px bg-white/10 flex-1"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            <article id="logistics-dashboard" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
-              <h4 className="text-2xl font-bold font-mono mb-3">Logistics &amp; Order Management Dashboard</h4>
-              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">Claude Code CLI, Supabase, RetailCRM, Vercel</p>
-              <p className="text-neutral-300 font-light leading-relaxed">
-                Engineered a mini-dashboard to manage orders, furniture production, and truck logistics. Built complex automated workflows for dynamic SKU generation, e-commerce price list creation, and live data synchronization.
-              </p>
-            </article>
-
-            <article id="openclaw-devops-agent" className="border border-white/10 bg-white/[0.02] p-6 md:p-8 rounded-sm hover:border-white/30 hover:bg-white/[0.04] transition-all duration-300 scroll-mt-24">
-              <h4 className="text-2xl font-bold font-mono mb-3">OpenClaw DevOps Agent</h4>
-              <p className="text-xs uppercase tracking-wider font-mono text-white/60 mb-4">Docker, OpenClaw, Shell, LLM APIs</p>
-              <p className="text-neutral-300 font-light leading-relaxed">
-                Designed an autonomous DevOps agent to deploy an open-source AI gateway. Automates infrastructure setup including Docker Compose orchestration, secure environment variable provisioning, and custom AI personality configuration.
-              </p>
-            </article>
-          </div>
+          <ProjectShowcase />
         </section>
 
         {/* THE LOG / EXPERIENCE */}
-        <section id="log-section" className="py-20 reveal-section relative scroll-mt-24">
-          <div className="absolute left-[15px] top-0 bottom-0 w-px bg-white/10 md:left-1/2"></div>
+        <section id="log-section" className="py-20 relative scroll-mt-24">
+          <div className="absolute left-[15px] top-0 bottom-0 w-px bg-white/10 md:left-1/2" aria-hidden="true">
+            <div
+              data-timeline-progress
+              className="absolute inset-0 origin-top bg-gradient-to-b from-white via-white/60 to-white/10 shadow-[0_0_14px_1px_rgba(255,255,255,0.55)]"
+            />
+          </div>
 
           <div className="flex items-center gap-4 mb-20 relative z-10 w-full justify-center">
-            <h3 className="font-mono text-xl tracking-widest uppercase text-white/80 bg-black px-4">The Log</h3>
+            <GlassSurface data-reveal tone="clear" display="inline-flex" className="rounded-full" contentClassName="px-6 py-2.5">
+              <h3 className="font-mono text-sm uppercase tracking-[0.28em] text-white/90 sm:text-lg">The Log</h3>
+            </GlassSurface>
           </div>
 
           <div className="space-y-24">
             {/* Experience: UpSound */}
             <div id="upsound-experience" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group scroll-mt-24">
-              <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
+              <div data-reveal className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
                 <h4 className="text-3xl font-bold font-mono">UpSound</h4>
-                <p className="text-neutral-500 font-mono mt-1">AI Integrator / Automation Builder</p>
-                <p className="text-neutral-600 font-mono text-sm mt-1 mb-4">May 2026 — Present</p>
+                <p className="text-white/50 font-mono mt-1">AI Integrator / Automation Builder</p>
+                <p className="text-white/50 font-mono text-sm mt-1 mb-4">May 2026 — Present</p>
                 <div className="flex flex-wrap gap-3 md:justify-end">
-                  <a href="https://www.upsound.ai/" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
+                  <a href="https://www.upsound.ai/" target="_blank" rel="noreferrer" className={pillLink}>
                     View UpSound AI
                     <ExternalLink size={13} aria-hidden="true" />
                   </a>
                 </div>
               </div>
               <div className="relative pl-12 md:pl-0">
-                <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
-                <p className="text-neutral-300 font-light leading-relaxed mb-5">
+                <RailNode />
+                <p data-reveal className="text-white/75 font-light leading-relaxed mb-5">
                   Built <span className="font-semibold text-white">UpSound AI</span>, a production AI/SaaS platform for independent musicians. The product helps artists analyze tracks, generate cover concepts, Reels scripts, playlist pitches, and release promotion plans through a Next.js web app, Telegram bot, FastAPI backend, PostgreSQL/Supabase data layer, background generation queues, and payment infrastructure. Before launch, the platform attracted 1,500+ pre-registrations; since launch, it has grown to 3,000 active users and 5,000 users overall.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-                  <div className="border border-white/10 bg-white/[0.03] p-4 rounded-sm">
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-2">Architecture</p>
-                    <p className="text-sm text-neutral-300 leading-relaxed">Next.js 15, React 19, TypeScript, Supabase Auth, FastAPI, aiogram 3, async SQLAlchemy, Redis, APScheduler.</p>
-                  </div>
-                  <div className="border border-white/10 bg-white/[0.03] p-4 rounded-sm">
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-2">AI Pipeline</p>
-                    <p className="text-sm text-neutral-300 leading-relaxed">Gemini, OpenRouter, xAI Grok, image generation, CLIP embeddings, pgvector search, clustering, provider fallbacks.</p>
-                  </div>
-                  <div className="border border-white/10 bg-white/[0.03] p-4 rounded-sm">
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-2">Monetization</p>
-                    <p className="text-sm text-neutral-300 leading-relaxed">Token subscriptions, T-Bank recurring payments, webhook validation, payment reconciliation, Cloudflare R2 storage.</p>
-                  </div>
-                  <div className="border border-white/10 bg-white/[0.03] p-4 rounded-sm">
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-white/40 mb-2">Production Quality</p>
-                    <p className="text-sm text-neutral-300 leading-relaxed">PostHog analytics, AI cost tracking, SQLAdmin dashboards, rate limits, 128 backend tests and 18 frontend tests.</p>
-                  </div>
+                  {[
+                    {
+                      label: "Architecture",
+                      text: "Next.js 15, React 19, TypeScript, Supabase Auth, FastAPI, aiogram 3, async SQLAlchemy, Redis, APScheduler.",
+                    },
+                    {
+                      label: "AI Pipeline",
+                      text: "Gemini, OpenRouter, xAI Grok, image generation, CLIP embeddings, pgvector search, clustering, provider fallbacks.",
+                    },
+                    {
+                      label: "Monetization",
+                      text: "Token subscriptions, T-Bank recurring payments, webhook validation, payment reconciliation, Cloudflare R2 storage.",
+                    },
+                    {
+                      label: "Production Quality",
+                      text: "PostHog analytics, AI cost tracking, SQLAdmin dashboards, rate limits, 128 backend tests and 18 frontend tests.",
+                    },
+                  ].map((item) => (
+                    <div key={item.label} data-reveal className="glass-lite glass-lite-hover rounded-[20px] p-4 backdrop-blur-md">
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-white/55 mb-2">{item.label}</p>
+                      <p className="text-sm text-white/75 leading-relaxed">{item.text}</p>
+                    </div>
+                  ))}
                 </div>
-                <p className="text-neutral-400 font-light leading-relaxed border-l-2 border-white/20 pl-4 py-1">
+                <p data-reveal className="text-white/60 font-light leading-relaxed border-l-2 border-white/25 pl-4 py-1">
                   Owned end-to-end delivery across frontend UX, backend APIs, Telegram workflows, AI integrations, payments, observability, and production deploys on Vercel and Railway.
                 </p>
                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -382,19 +306,22 @@ export default function Home() {
                     <button
                       key={preview.src}
                       type="button"
+                      data-reveal
                       onClick={() => setSelectedPreview(preview)}
-                      className="group/preview overflow-hidden border border-white/10 bg-white/[0.03] rounded-sm text-left transition-colors hover:border-white/30 focus:outline-none focus:ring-1 focus:ring-white/40"
+                      className="group/preview glass-lite glass-lite-hover lg-press overflow-hidden rounded-[18px] p-1.5 text-left focus:outline-none focus-visible:ring-1 focus-visible:ring-white/50"
                       aria-label={`Open ${preview.title} preview`}
                     >
-                      <Image
-                        src={preview.src}
-                        alt={preview.alt}
-                        width={1900}
-                        height={958}
-                        sizes="(min-width: 768px) 14vw, 100vw"
-                        className="aspect-video w-full object-cover opacity-80 transition-all duration-500 group-hover/preview:scale-[1.03] group-hover/preview:opacity-100"
-                      />
-                      <p className="px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-white/50">{preview.title}</p>
+                      <span className="block overflow-hidden rounded-[13px]">
+                        <Image
+                          src={preview.src}
+                          alt={preview.alt}
+                          width={1900}
+                          height={958}
+                          sizes="(min-width: 768px) 14vw, 100vw"
+                          className="aspect-video w-full object-cover opacity-85 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/preview:scale-[1.05] group-hover/preview:opacity-100"
+                        />
+                      </span>
+                      <p className="px-2 pb-1 pt-2 font-mono text-[10px] uppercase tracking-widest text-white/55">{preview.title}</p>
                     </button>
                   ))}
                 </div>
@@ -403,34 +330,36 @@ export default function Home() {
 
             {/* Experience 1 */}
             <div id="deo-home-experience" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group scroll-mt-24">
-              <div className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
+              <div data-reveal className="md:text-right pl-12 md:pl-0 flex flex-col md:items-end">
                 <h4 className="text-3xl font-bold font-mono">DEO HOME</h4>
-                <p className="text-neutral-500 font-mono mt-1">Full-Stack Developer &amp; Low-Code AI Automation Engineer</p>
-                <p className="text-neutral-600 font-mono text-sm mt-1 mb-4">April 2025 — May 2026</p>
+                <p className="text-white/50 font-mono mt-1">Full-Stack Developer &amp; Low-Code AI Automation Engineer</p>
+                <p className="text-white/50 font-mono text-sm mt-1 mb-4">April 2025 — May 2026</p>
                 <div className="flex flex-wrap gap-3 md:justify-end">
-                  <a href="https://deohome.online/" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
+                  <a href="https://deohome.online/" target="_blank" rel="noreferrer" className={pillLink}>
                     deohome.online
                   </a>
-                  <a href="https://deooffice.ru/" target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-mono border border-white/20 py-1 px-3 rounded hover:bg-white hover:text-black transition-colors">
+                  <a href="https://deooffice.ru/" target="_blank" rel="noreferrer" className={pillLink}>
                     deooffice.ru
                   </a>
                 </div>
               </div>
               <div className="relative pl-12 md:pl-0">
-                <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
-                <p className="text-neutral-300 font-light leading-relaxed mb-4">
+                <RailNode />
+                <p data-reveal className="text-white/75 font-light leading-relaxed mb-4">
                   Engineered and developed high-end furniture catalogs and commercial eCommerce platforms. Currently maintaining the platform and building AI-driven automation systems (n8n, OpenAI, APIs) to streamline internal operations, B2B sales, and eliminate manual workflows.
                 </p>
-                <div className="my-8 border border-white/10 rounded-lg overflow-hidden relative group/img bg-white/5">
-                  <Image
-                    src="/assets/pwa-portfolio.webp"
-                    alt="DEO HOME PWA Portfolio"
-                    width={1200}
-                    height={800}
-                    className="w-full h-auto object-cover group-hover/img:scale-105 transition-all duration-700"
-                  />
+                <div data-reveal className="glass-lite my-8 overflow-hidden rounded-[26px] p-2 group/img">
+                  <div className="overflow-hidden rounded-[19px]">
+                    <Image
+                      src="/assets/pwa-portfolio.webp"
+                      alt="DEO HOME PWA Portfolio"
+                      width={1200}
+                      height={800}
+                      className="w-full h-auto object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/img:scale-105"
+                    />
+                  </div>
                 </div>
-                <p className="text-neutral-300 font-light leading-relaxed border-l-2 border-white/20 pl-4 py-1 italic">
+                <p data-reveal className="text-white/75 font-light leading-relaxed border-l-2 border-white/25 pl-4 py-1 italic">
                   &quot;A modern Progressive Web Application for a furniture brand — fast, installable, offline-ready, with a premium tablet-optimized UI and seamless SPA experience, delivering a native-app experience directly in the browser.&quot;
                 </p>
               </div>
@@ -438,14 +367,14 @@ export default function Home() {
 
             {/* Experience 2 */}
             <div id="naghashyan-experience" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group scroll-mt-24">
-              <div className="md:text-right pl-12 md:pl-0">
+              <div data-reveal className="md:text-right pl-12 md:pl-0">
                 <h4 className="text-3xl font-bold font-mono">Naghashyan Solutions</h4>
-                <p className="text-neutral-500 font-mono mt-1">Frontend Developer (Intern)</p>
-                <p className="text-neutral-600 font-mono text-sm mt-1">November 2022 — June 2023</p>
+                <p className="text-white/50 font-mono mt-1">Frontend Developer (Intern)</p>
+                <p className="text-white/50 font-mono text-sm mt-1">November 2022 — June 2023</p>
               </div>
               <div className="relative pl-12 md:pl-0">
-                <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
-                <p className="text-neutral-300 font-light leading-relaxed">
+                <RailNode />
+                <p data-reveal className="text-white/75 font-light leading-relaxed">
                   Mastered core frontend principles (HTML, CSS, Responsive design). Expanded computational thinking and data structures utilizing C++ for algorithmic problem solving.
                 </p>
               </div>
@@ -453,13 +382,13 @@ export default function Home() {
 
             {/* Experience 3 */}
             <div id="npua-education" className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 w-full group scroll-mt-24">
-              <div className="md:text-right pl-12 md:pl-0">
+              <div data-reveal className="md:text-right pl-12 md:pl-0">
                 <h4 className="text-3xl font-bold font-mono">NPUA</h4>
-                <p className="text-neutral-500 font-mono mt-1">Software Engineering</p>
+                <p className="text-white/50 font-mono mt-1">Software Engineering</p>
               </div>
               <div className="relative pl-12 md:pl-0">
-                <div className="absolute left-[-2.25rem] md:left-[-2.5rem] top-2 w-4 h-4 rounded-full bg-black border-2 border-white group-hover:scale-125 transition-transform z-10"></div>
-                <p className="text-neutral-300 font-light leading-relaxed">
+                <RailNode />
+                <p data-reveal className="text-white/75 font-light leading-relaxed">
                   Currently studying at the National Polytechnical University of Armenia.<br />
                   Pursuing a Bachelor of Applied Science with a focus on Software Engineering.
                 </p>
@@ -476,10 +405,11 @@ export default function Home() {
           role="dialog"
           aria-modal="true"
           aria-label={`${selectedPreview.title} preview`}
+          data-lenis-prevent
         >
           <button
             type="button"
-            className="absolute inset-0 bg-black/85 backdrop-blur-md"
+            className="absolute inset-0 bg-black/70 backdrop-blur-xl"
             onClick={() => setSelectedPreview(null)}
             onMouseDown={() => setSelectedPreview(null)}
             onTouchStart={() => setSelectedPreview(null)}
@@ -487,29 +417,30 @@ export default function Home() {
             tabIndex={-1}
             aria-label="Close preview backdrop"
           />
-          <div
-            ref={previewModalRef}
-            className="relative z-10 w-full max-w-6xl overflow-hidden rounded-sm border border-white/15 bg-black shadow-[0_30px_100px_rgba(0,0,0,0.7)]"
-          >
-            <button
-              type="button"
-              onClick={() => setSelectedPreview(null)}
-              className="absolute left-3 top-3 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-black/70 text-white/70 backdrop-blur-md transition-colors hover:bg-white hover:text-black focus:outline-none focus:ring-1 focus:ring-white/50"
-              aria-label="Close preview"
-            >
-              <X size={18} />
-            </button>
-            <Image
-              src={selectedPreview.src}
-              alt={selectedPreview.alt}
-              width={1900}
-              height={958}
-              sizes="90vw"
-              className="max-h-[82vh] w-full object-contain"
-            />
-            <div className="border-t border-white/10 px-4 py-3">
-              <p className="font-mono text-xs uppercase tracking-widest text-white/60">{selectedPreview.title}</p>
-            </div>
+          <div ref={previewModalRef} className="relative z-10 w-full max-w-6xl">
+            <GlassSurface tone="dark" className="overflow-hidden rounded-[30px] p-2 shadow-[0_40px_120px_rgba(0,0,0,0.75)]">
+              <button
+                type="button"
+                onClick={() => setSelectedPreview(null)}
+                className="glass-chip absolute left-5 top-5 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-white/50"
+                aria-label="Close preview"
+              >
+                <X size={18} />
+              </button>
+              <div className="overflow-hidden rounded-[23px]">
+                <Image
+                  src={selectedPreview.src}
+                  alt={selectedPreview.alt}
+                  width={1900}
+                  height={958}
+                  sizes="90vw"
+                  className="max-h-[82vh] w-full object-contain"
+                />
+              </div>
+              <div className="px-4 pb-2 pt-3">
+                <p className="font-mono text-xs uppercase tracking-widest text-white/65">{selectedPreview.title}</p>
+              </div>
+            </GlassSurface>
           </div>
         </div>
       ) : null}
