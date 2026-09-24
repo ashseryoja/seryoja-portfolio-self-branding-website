@@ -128,11 +128,11 @@ export default function Home() {
   return (
     <div ref={containerRef} className="relative min-h-screen text-white bg-transparent">
       {/* Content Overlay */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-32 pb-48 selection:bg-white selection:text-black">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-24 pb-48 selection:bg-white selection:text-black sm:pt-32">
 
         {/* HERO SECTION */}
-        <section data-hero className="flex min-h-[calc(100svh-8rem)] flex-col justify-center pb-16 md:min-h-[80vh] md:pb-0">
-          <div data-hero-drift="0.55" className="mb-6">
+        <section data-hero className="flex min-h-[calc(100svh-6rem)] flex-col justify-center pb-24 sm:min-h-[calc(100svh-8rem)] sm:pb-16 md:min-h-[80vh] md:pb-0">
+          <div data-hero-drift="0.55" className="mb-5 sm:mb-6">
             <GlassSurface
               data-intro
               tone="clear"
@@ -147,7 +147,7 @@ export default function Home() {
             </GlassSurface>
           </div>
 
-          <HeroLens className="mb-8 w-fit max-w-full">
+          <HeroLens className="mb-6 w-fit max-w-full sm:mb-8">
             <h1 className="text-[12vw] sm:text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter leading-[0.9] cursor-default break-words">
               <span className="block overflow-hidden pb-[0.05em]">
                 <span data-intro-line className="block">SERGEY</span>
@@ -159,7 +159,7 @@ export default function Home() {
           </HeroLens>
 
           <div data-hero-drift="0.3">
-            <p data-intro className="max-w-2xl text-lg sm:text-xl font-light leading-relaxed text-white/60 mb-8 sm:mb-10">
+            <p data-intro className="max-w-2xl text-base sm:text-xl font-light leading-relaxed text-white/60 mb-7 sm:mb-10">
               I build AI integrations and automation systems that connect products, data, teams, and business workflows.<br />
               From idea to production: interfaces, APIs, agents, payments, and deployment.
             </p>

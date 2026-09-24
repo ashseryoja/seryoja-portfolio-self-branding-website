@@ -70,13 +70,14 @@ export default function HeroLens({ children, className }: { children: ReactNode;
     if (!container) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // Touch screens get a short drift that a touch on the title renews; the
-    // lens then rests so the phone isn't re-filtering the title every frame.
+    // Phones re-filter the title at ~30fps instead of every frame; the drift
+    // is slow enough that it reads just as smooth.
     const coarse = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-    const DRIFT_WINDOW = 9000;
-    let driftUntil = performance.now() + DRIFT_WINDOW;
-    let lastX = NaN;
-    let lastY = NaN;
+    const minInterval = coarse ? 32 : 0;
+    let lastSet = -Infinity;
+    // Out of range so the first frame always places the lens.
+    let lastX = -1;
+    let lastY = -1;
     let targetX = 0.7;
     let targetY = 0.62;
     let currentX = targetX;
@@ -95,7 +96,6 @@ export default function HeroLens({ children, className }: { children: ReactNode;
         event.clientY < rect.bottom + margin;
       if (!inside) return;
       lastPointer = performance.now();
-      driftUntil = lastPointer + DRIFT_WINDOW;
       targetX = (event.clientX - rect.left) / rect.width;
       targetY = (event.clientY - rect.top) / rect.height;
     };
@@ -104,8 +104,7 @@ export default function HeroLens({ children, className }: { children: ReactNode;
       const width = container.offsetWidth || 1;
       const height = container.offsetHeight || 1;
 
-      const drifting = !reduced && (!coarse || now < driftUntil);
-      if (drifting && now - lastPointer > 2600) {
+      if (!reduced && now - lastPointer > 2600) {
         const t = now / 1000;
         targetX = 0.5 + 0.42 * Math.sin(t * 0.21);
         targetY = 0.5 + 0.34 * Math.sin(t * 0.33 + 1.2);
@@ -120,11 +119,13 @@ export default function HeroLens({ children, className }: { children: ReactNode;
       const nextX = clamp(currentX, halfX, 1 - halfX);
       const nextY = clamp(currentY, halfY, 1 - halfY);
       // Only touch the filter when the lens actually moved.
-      if (Math.abs(nextX - lastX) > 0.0004 || Math.abs(nextY - lastY) > 0.0004) {
+      const moved = Math.abs(nextX - lastX) > 0.0004 || Math.abs(nextY - lastY) > 0.0004;
+      if (moved && now - lastSet >= minInterval) {
         x.set(nextX);
         y.set(nextY);
         lastX = nextX;
         lastY = nextY;
+        lastSet = now;
       }
 
       frame = running ? requestAnimationFrame(tick) : 0;

@@ -13,22 +13,23 @@ const items: Array<{ href: string; label: string; icon: LucideIcon }> = [
     { href: "/contact", label: "Contact Page", icon: User },
 ];
 
-// The selection "droplet": a lens that slides between items and magnifies
-// the icon under it, like the iOS 26 tab bar.
+// The selection "droplet": a lens that slides between items, like the iOS 26
+// tab bar. Only its rim bends light — the centre stays flat so the icon under
+// it keeps its shape.
 const LENS_OPTICS: Partial<GlassOptics> = {
     mapSize: 256,
-    strength: 0.14,
-    depth: 1,
-    curvature: 0.72,
-    dispersion: 0.7,
-    bend: 0.35,
-    bendWidth: 0.18,
+    strength: 0.06,
+    depth: 0.32,
+    curvature: 0.12,
+    dispersion: 0.3,
+    bend: 0.55,
+    bendWidth: 0.12,
     frost: 0,
     brightness: 0.1,
-    sheen: 0.75,
+    sheen: 0.7,
     sheenWidth: 3,
-    glow: 0.32,
-    specular: 1.4,
+    glow: 0.22,
+    specular: 1.3,
 };
 
 const LENS_WIDTH = 58;
@@ -78,7 +79,7 @@ export default function SocialDock() {
     useEffect(() => () => animation.current?.stop(), []);
 
     return (
-        <div className="pointer-events-none fixed inset-x-0 bottom-8 z-50 flex justify-center">
+        <div className="pointer-events-none fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex justify-center sm:bottom-8">
             <div className="pointer-events-auto relative">
                 {/* Hover text for AI Chat */}
                 <div className={`pointer-events-none absolute bottom-full left-1/2 mb-4 -translate-x-1/2 whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] font-mono text-xs ${hoverChat ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-0'}`}>
