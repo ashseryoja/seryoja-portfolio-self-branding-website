@@ -5,6 +5,7 @@ import SocialDock from "@/components/SocialDock";
 import ProfileModal from "@/components/ProfileModal";
 import LiquidBackdrop from "@/components/liquid/LiquidBackdrop";
 import SmoothScroll from "@/components/liquid/SmoothScroll";
+import { profile, site } from "@/content/profile";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono" });
@@ -14,31 +15,30 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://seryoja-portfolio-self-branding-web.vercel.app"),
-  title: "Sergey Ashughyan | Developer & Automation Architect",
-  description: "Monochrome portfolio of Sergey Ashughyan - Full Stack Web Developer and n8n Automation Specialist.",
+  metadataBase: new URL(site.url),
+  title: {
+    default: site.title,
+    template: `%s — ${profile.name}`,
+  },
+  description: site.description,
+  applicationName: profile.name,
+  authors: [{ name: profile.name, url: site.url }],
+  creator: profile.name,
   manifest: "/manifest.json",
   openGraph: {
-    title: "Sergey Ashughyan | Developer & Automation Architect",
-    description: "Monochrome portfolio of Sergey Ashughyan - Full Stack Web Developer and n8n Automation Specialist.",
-    url: "https://seryoja-portfolio-self-branding-web.vercel.app",
-    siteName: "Sergey Ashughyan",
-    images: [
-      {
-        url: "https://seryoja-portfolio-self-branding-web.vercel.app/assets/link-preview.jpeg",
-        width: 1200,
-        height: 630,
-        alt: "Sergey Ashughyan Portfolio Preview",
-      },
-    ],
+    title: site.title,
+    description: site.description,
+    url: site.url,
+    siteName: profile.name,
     locale: "en_US",
-    type: "website",
+    type: "profile",
+    firstName: profile.firstName,
+    lastName: profile.lastName,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sergey Ashughyan | Developer & Automation Architect",
-    description: "Monochrome portfolio of Sergey Ashughyan - Full Stack Web Developer and n8n Automation Specialist.",
-    images: ["https://seryoja-portfolio-self-branding-web.vercel.app/assets/link-preview.jpeg"],
+    title: site.title,
+    description: site.description,
   },
 };
 

@@ -8,9 +8,9 @@ import { usePathname } from "next/navigation";
 import GlassSurface from "@/components/liquid/GlassSurface";
 
 const items: Array<{ href: string; label: string; icon: LucideIcon }> = [
-    { href: "/", label: "Main Page", icon: Home },
-    { href: "/chat", label: "AI Chat Page", icon: MessageCircle },
-    { href: "/contact", label: "Contact Page", icon: User },
+    { href: "/", label: "Home", icon: Home },
+    { href: "/chat", label: "AI assistant", icon: MessageCircle },
+    { href: "/contact", label: "Contact", icon: User },
 ];
 
 // The selection "droplet": a lens that slides between items, like the iOS 26
@@ -79,11 +79,11 @@ export default function SocialDock() {
     useEffect(() => () => animation.current?.stop(), []);
 
     return (
-        <div className="pointer-events-none fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex justify-center sm:bottom-8">
+        <nav aria-label="Pages" className="pointer-events-none fixed inset-x-0 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex justify-center sm:bottom-8">
             <div className="pointer-events-auto relative">
-                {/* Hover text for AI Chat */}
+                {/* Hover hint for the AI assistant */}
                 <div className={`pointer-events-none absolute bottom-full left-1/2 mb-4 -translate-x-1/2 whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] font-mono text-xs ${hoverChat ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-0'}`}>
-                    <span className="glass-chip block rounded-full px-3 py-1.5 text-white/80">&gt; init chat...</span>
+                    <span className="glass-chip block rounded-full px-3 py-1.5 text-white/80">Ask my AI assistant</span>
                 </div>
 
                 {/* Container */}
@@ -132,6 +132,6 @@ export default function SocialDock() {
                     </Glass>
                 </GlassSurface>
             </div>
-        </div>
+        </nav>
     );
 }

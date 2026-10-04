@@ -1,7 +1,7 @@
 {
-    "name": "Sergey Ashughyan Portfolio",
-    "short_name": "Sergey Portfolio",
-    "description": "Monochrome portfolio of Sergey Ashughyan",
+    "name": "Sergey Ashughyan — AI Engineer",
+    "short_name": "Sergey Ashughyan",
+    "description": "Portfolio of Sergey Ashughyan, AI Engineer building production LLM systems.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#000000",

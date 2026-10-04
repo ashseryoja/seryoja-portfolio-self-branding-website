@@ -1,7 +1,5 @@
-"use client";
-
 import { ArrowUpRight, Github } from "lucide-react";
-import GlassSurface from "@/components/liquid/GlassSurface";
+import SectionHeading from "@/components/SectionHeading";
 
 const USERNAME = "ashseryoja";
 const PROFILE_URL = `https://github.com/${USERNAME}`;
@@ -27,14 +25,11 @@ const activeDays = activityCells.filter((cell) => cell.level !== null && cell.le
 
 export default function GithubActivity() {
   return (
-    <section id="github-activity" className="pb-24 md:pb-32 scroll-mt-24" aria-labelledby="github-activity-title">
-      <div className="mb-8 flex justify-center md:mb-10">
-        <GlassSurface data-reveal tone="clear" display="inline-flex" className="rounded-full" contentClassName="px-6 py-2.5">
-          <h2 id="github-activity-title" className="text-center font-mono text-sm uppercase tracking-[0.28em] text-white/90 sm:text-lg">
-            GitHub Activity
-          </h2>
-        </GlassSurface>
-      </div>
+    <section id="github-activity" className="scroll-mt-24 py-20 md:py-28" aria-labelledby="github-activity-title">
+      <SectionHeading id="github-activity-title" index="06" eyebrow="GitHub" title="Activity snapshot">
+        Production work for UpSound AI and Dizzit AI lives in private repositories, so this graph is the public tip of it. I’m happy to
+        walk through the architecture in an interview.
+      </SectionHeading>
 
       <div>
         <div data-reveal className="flex flex-col gap-5 pb-6 sm:flex-row sm:items-center sm:justify-between">
@@ -53,7 +48,7 @@ export default function GithubActivity() {
                 @{USERNAME}
                 <ArrowUpRight className="h-3.5 w-3.5 text-white/50 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" aria-hidden="true" />
               </span>
-              <span className="mt-1 block text-xs text-white/55">Contribution snapshot</span>
+              <span className="mt-1 block text-xs text-white/55">16-week contribution snapshot</span>
             </span>
           </a>
 

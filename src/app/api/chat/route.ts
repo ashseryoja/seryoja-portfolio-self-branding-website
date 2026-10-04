@@ -11,6 +11,17 @@ type ChatMessage = {
 const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 const MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
 const MAX_HISTORY = 20;
+// Visitors ask about a CV, not paste novels; cap what reaches the model.
+const MAX_MESSAGE_CHARS = 2000;
+const MAX_REPLY_TOKENS = 700;
+
+// Only user/assistant turns are accepted from the client. A forged "system"
+// turn in the history would otherwise sit next to the real system prompt.
+const isChatMessage = (value: unknown): value is ChatMessage =>
+  !!value &&
+  typeof value === "object" &&
+  ((value as ChatMessage).role === "user" || (value as ChatMessage).role === "assistant") &&
+  typeof (value as ChatMessage).content === "string";
 
 function getOpenAIErrorReply(status: number, errorBody: string): string {
   try {
@@ -19,60 +30,48 @@ function getOpenAIErrorReply(status: number, errorBody: string): string {
     const type = parsed?.error?.type;
 
     if (status === 429 && (code === "insufficient_quota" || type === "insufficient_quota")) {
-      return "AI chat is temporarily unavailable: the server OpenAI quota is exhausted. Please check billing or replace the API key.";
+      return "The AI assistant is temporarily unavailable. Please email ashseryoja@gmail.com or try again later.";
     }
 
-    if (status === 401) {
-      return "AI chat is temporarily unavailable: the server OpenAI API key is invalid.";
-    }
-
-    if (status === 404 || code === "model_not_found") {
-      return `AI chat is temporarily unavailable: the configured model (${MODEL}) is not available for this API key.`;
+    if (status === 429) {
+      return "The AI assistant is getting a lot of questions right now. Please try again in a moment.";
     }
   } catch {
     // Fall back to the generic message below when the upstream error is not JSON.
   }
 
-  return "Upstream LLM error. Try again in a moment.";
+  return "The AI assistant could not answer just now. Please try again in a moment.";
 }
 
 export async function POST(request: Request) {
   try {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
+      console.error("Chat API: OPENAI_API_KEY is not configured.");
       return NextResponse.json(
-        { reply: "OPENAI_API_KEY is not configured on the server." },
-        { status: 500 }
+        { reply: "The AI assistant is offline right now. Please use the contact page instead." },
+        { status: 503 }
       );
     }
 
     const body = await request.json();
-    const userMessage: string =
-      body.chatInput || body.message || body.query || "";
+    const userMessage: string = String(body.chatInput || body.message || body.query || "").trim();
 
-    if (!userMessage.trim()) {
-      return NextResponse.json(
-        { reply: "Empty message." },
-        { status: 400 }
-      );
+    if (!userMessage) {
+      return NextResponse.json({ reply: "Empty message." }, { status: 400 });
     }
 
     const history: ChatMessage[] = Array.isArray(body.history)
       ? body.history
-          .filter(
-            (m: unknown): m is ChatMessage =>
-              !!m &&
-              typeof m === "object" &&
-              (m as ChatMessage).role !== undefined &&
-              typeof (m as ChatMessage).content === "string"
-          )
+          .filter(isChatMessage)
           .slice(-MAX_HISTORY)
+          .map((m: ChatMessage) => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE_CHARS) }))
       : [];
 
     const messages = [
       { role: "system", content: getSystemPrompt() },
       ...history,
-      { role: "user", content: userMessage },
+      { role: "user", content: userMessage.slice(0, MAX_MESSAGE_CHARS) },
     ];
 
     const response = await fetch(OPENAI_URL, {
@@ -84,7 +83,8 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         model: MODEL,
         messages,
-        temperature: 0.7,
+        temperature: 0.4,
+        max_completion_tokens: MAX_REPLY_TOKENS,
       }),
     });
 
@@ -104,10 +104,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ reply });
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.error("Chat API error:", message, error);
+    console.error("Chat API error:", error);
     return NextResponse.json(
-      { reply: `Internal server error: ${message}` },
+      { reply: "Something went wrong on my side. Please try again in a moment." },
       { status: 500 }
     );
   }

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import Image from "next/image";
-import { Github, Linkedin, Send, Instagram, X, ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Download, Gamepad2, Mail, MapPin, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import GlassSurface from "@/components/liquid/GlassSurface";
+import SocialIcon from "@/components/SocialIcon";
+import { profile, socials } from "@/content/profile";
 import { cn } from "@/lib/cn";
 
 const LIQUID_EASE = [0.22, 1, 0.36, 1] as const;
@@ -29,7 +31,7 @@ const GLASS_ICON_BUTTON =
     "rounded-full p-2 text-white/60 hover:text-white bg-white/[0.06] hover:bg-white/[0.12] shadow-[inset_0_1px_0_rgba(255,255,255,0.16),inset_0_0_0_1px_rgba(255,255,255,0.08)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.3),inset_0_0_0_1px_rgba(255,255,255,0.16),0_10px_24px_-14px_rgba(0,0,0,0.9)] transition-[color,background-color,box-shadow,transform] duration-500 ease-[var(--ease-liquid)] hover:-translate-y-px active:translate-y-0 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-white/60";
 
 const SOCIAL_ROW =
-    "glass-lite glass-lite-hover flex items-center gap-4 w-full px-4 py-3 rounded-2xl text-white hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-white/60 group";
+    "glass-lite glass-lite-hover flex items-center gap-3 w-full px-4 py-3 rounded-2xl text-white hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-white/60 group";
 
 export default function ProfileModal() {
     const [isOpen, setIsOpen] = useState(false);
@@ -40,14 +42,28 @@ export default function ProfileModal() {
         setTimeout(() => setView('socials'), 500);
     };
 
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                setIsOpen(false);
+                setTimeout(() => setView('socials'), 500);
+            }
+        };
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, [isOpen]);
+
     return (
         <>
             <AnimatePresence>
                 {/* Profile Trigger Button & Callout Container */}
                 {!isOpen && (
-                    <div className="fixed top-6 left-6 z-50 flex items-center gap-4">
+                    <div className="fixed top-6 left-6 z-50">
                         <motion.button
                             onClick={() => setIsOpen(true)}
+                            aria-label={`Open ${profile.name}'s contact card`}
+                            aria-haspopup="dialog"
                             className="relative w-12 h-12 rounded-full group shrink-0 transition-transform duration-500 ease-[var(--ease-liquid)] hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-white/60"
                             style={{ borderRadius: 9999 }}
                         >
@@ -71,8 +87,8 @@ export default function ProfileModal() {
                             >
                                 <motion.div className="w-full h-full relative z-0 overflow-hidden" style={{ borderRadius: 9999 }}>
                                     <Image
-                                        src="/assets/profile.webp"
-                                        alt="Sergey Ashughyan"
+                                        src={profile.photo}
+                                        alt=""
                                         fill
                                         sizes="48px"
                                         className="object-cover group-hover:scale-110 transition-transform duration-500 ease-[var(--ease-liquid)]"
@@ -85,45 +101,6 @@ export default function ProfileModal() {
                             </GlassSurface>
                         </motion.button>
 
-                        {/* Animated 'Click Here' SVG + Text */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: [0, 1, 1, 0], x: [-10, 0, 0, 0] }}
-                            transition={{
-                                duration: 8,
-                                times: [0, 0.05, 0.95, 1], // Fades in quickly, stays for 7+ seconds, fades out at the end of 8s
-                                ease: "easeInOut"
-                            }}
-                            className="flex items-center gap-2 pointer-events-none"
-                        >
-                            <svg
-                                width="32"
-                                height="32"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="text-white/90 relative top-px drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
-                                style={{
-                                    animation: "bounce-horizontal 1.5s infinite"
-                                }}
-                            >
-                                <style>
-                                    {`
-                                        @keyframes bounce-horizontal {
-                                            0%, 100% { transform: translateX(0); }
-                                            50% { transform: translateX(-25%); }
-                                        }
-                                    `}
-                                </style>
-                                <path d="M19 12H5M5 12L12 19M5 12L12 5" />
-                            </svg>
-                            <span className="glass-chip rounded-full px-3 py-1.5 font-mono text-[10px] sm:text-xs font-bold text-white uppercase tracking-widest whitespace-nowrap overflow-hidden">
-                                Click Here
-                            </span>
-                        </motion.div>
                     </div>
                 )}
             </AnimatePresence>
@@ -131,7 +108,12 @@ export default function ProfileModal() {
             {/* Modal Overlay */}
             <AnimatePresence>
                 {isOpen && (
-                    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+                    <div
+                        className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="profile-card-title"
+                    >
 
                         <motion.div
                             initial={{ opacity: 0 }}
@@ -173,6 +155,7 @@ export default function ProfileModal() {
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
                                         onClick={() => setView('socials')}
+                                        aria-label="Back to contact card"
                                         className={cn(GLASS_ICON_BUTTON, "absolute top-4 left-4 z-20 flex items-center gap-2 sm:pr-4")}
                                     >
                                         <ArrowLeft size={20} />
@@ -186,6 +169,7 @@ export default function ProfileModal() {
                                     animate={{ opacity: 1, transition: { delay: 0.2 } }}
                                     exit={{ opacity: 0 }}
                                     onClick={handleClose}
+                                    aria-label="Close contact card"
                                     className={cn(GLASS_ICON_BUTTON, "absolute top-4 right-4 z-30")}
                                 >
                                     <X size={20} />
@@ -207,8 +191,8 @@ export default function ProfileModal() {
                                                 style={{ borderRadius: 9999 }}
                                             >
                                                 <Image
-                                                    src="/assets/profile.webp"
-                                                    alt="Sergey Ashughyan"
+                                                    src={profile.photo}
+                                                    alt={profile.name}
                                                     fill
                                                     sizes="96px"
                                                     className="object-cover"
@@ -219,43 +203,60 @@ export default function ProfileModal() {
                                                 />
                                             </motion.div>
 
-                                            <h3 className="text-2xl font-bold font-mono mb-2 text-white tracking-tight">Sergey Ashughyan</h3>
-                                            <p className="text-white/60 font-mono text-sm leading-relaxed mb-8 text-center pt-1">
-                                                Software Engineer & Low Code AI Automation Architect
+                                            <h2 id="profile-card-title" className="text-2xl font-semibold mb-1 text-white tracking-tight">{profile.name}</h2>
+                                            <p className="text-white/85 text-base">{profile.role}</p>
+                                            <p className="mt-2 mb-5 flex items-center gap-1.5 font-mono text-xs text-white/50">
+                                                <MapPin size={12} aria-hidden="true" />
+                                                {profile.location} · {profile.timezone}
+                                            </p>
+                                            <p className="mb-6 inline-flex items-center gap-2 rounded-full bg-emerald-300/[0.08] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-emerald-200/90 shadow-[inset_0_0_0_1px_rgba(110,231,183,0.22)]">
+                                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" aria-hidden="true" />
+                                                {profile.availability}
                                             </p>
 
-                                            {/* Social Links List */}
-                                            <div className="w-full space-y-3 mb-8 relative z-20">
-                                                <a href="https://github.com/ashseryoja" target="_blank" rel="noreferrer" className={SOCIAL_ROW}>
-                                                    <Github size={20} />
-                                                    <span className="font-mono text-sm font-bold">GitHub</span>
-                                                </a>
-
-                                                <a href="https://www.linkedin.com/in/sergey-ashughyan-928350253/" target="_blank" rel="noreferrer" className={SOCIAL_ROW}>
-                                                    <Linkedin size={20} />
-                                                    <span className="font-mono text-sm font-bold">LinkedIn</span>
-                                                </a>
-
-                                                <a href="https://t.me/ashseryoja" target="_blank" rel="noreferrer" className={SOCIAL_ROW}>
-                                                    <Send size={20} />
-                                                    <span className="font-mono text-sm font-bold">Telegram</span>
-                                                </a>
-
-                                                <a href="https://instagram.com/ash.seryoja?igsh=MXA1Mm1mZWFlYzF6ag%3D%3D&utm_source=qr" target="_blank" rel="noreferrer" className={SOCIAL_ROW}>
-                                                    <Instagram size={20} />
-                                                    <span className="font-mono text-sm font-bold">Instagram</span>
-                                                </a>
-                                            </div>
-
-                                            {/* Secret Button Placeholder */}
-                                            <div className="w-full relative z-20">
-                                                <button
-                                                    onClick={() => setView('dino')}
-                                                    className="lg-press w-full px-5 py-3.5 bg-[linear-gradient(180deg,#ffffff_0%,#e9ebf1_100%)] text-black font-mono font-bold rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(0,0,0,0.1),0_0_0_1px_rgba(255,255,255,0.35),0_16px_36px_-16px_rgba(255,255,255,0.45),0_12px_24px_-14px_rgba(0,0,0,0.85)] flex items-center justify-center gap-2 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-white/60"
+                                            {/* Primary actions */}
+                                            <div className="w-full grid grid-cols-2 gap-2.5 mb-3 relative z-20">
+                                                <a
+                                                    href={`mailto:${profile.email}`}
+                                                    className="lg-press flex items-center justify-center gap-2 rounded-full bg-[linear-gradient(180deg,#ffffff_0%,#e9ebf1_100%)] px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-black shadow-[inset_0_1px_0_rgba(255,255,255,1),inset_0_-1px_0_rgba(0,0,0,0.1),0_12px_24px_-14px_rgba(0,0,0,0.85)] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-white/60"
                                                 >
-                                                    ??? (Secret Mechanism)
-                                                </button>
+                                                    <Mail size={15} aria-hidden="true" />
+                                                    Email
+                                                </a>
+                                                <a
+                                                    href={profile.cv.href}
+                                                    download={profile.cv.fileName}
+                                                    className="glass-lite glass-lite-hover lg-press flex items-center justify-center gap-2 rounded-full px-4 py-3 font-mono text-xs uppercase tracking-wider text-white focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-white/60"
+                                                >
+                                                    <Download size={15} aria-hidden="true" />
+                                                    CV
+                                                </a>
                                             </div>
+
+                                            {/* Profiles */}
+                                            <ul className="w-full space-y-2.5 mb-6 relative z-20">
+                                                {socials
+                                                    .filter((social) => social.id !== "email")
+                                                    .map((social) => (
+                                                        <li key={social.id}>
+                                                            <a href={social.href} target="_blank" rel="noreferrer" className={SOCIAL_ROW}>
+                                                                <SocialIcon id={social.id} size={18} />
+                                                                <span className="font-mono text-sm font-semibold">{social.label}</span>
+                                                                <span className="ml-auto truncate font-mono text-xs text-white/45">{social.value}</span>
+                                                                <ArrowUpRight size={14} className="shrink-0 text-white/40 transition-colors group-hover:text-white" aria-hidden="true" />
+                                                            </a>
+                                                        </li>
+                                                    ))}
+                                            </ul>
+
+                                            {/* Easter egg, kept out of the way */}
+                                            <button
+                                                onClick={() => setView('dino')}
+                                                className="relative z-20 inline-flex items-center gap-1.5 rounded-full px-2 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white/35 transition-colors hover:text-white/70 focus-visible:outline focus-visible:outline-1 focus-visible:outline-white/60"
+                                            >
+                                                <Gamepad2 size={12} aria-hidden="true" />
+                                                Offline mode
+                                            </button>
                                         </motion.div>
                                     ) : (
                                         <motion.div
@@ -265,7 +266,7 @@ export default function ProfileModal() {
                                             exit={{ opacity: 0, scale: 0.95 }}
                                             className="absolute inset-0 w-full h-full flex flex-col items-center justify-center p-8 pt-16 pb-8"
                                         >
-                                            <h3 className="font-mono text-lg font-bold text-center mb-6 tracking-widest text-[#fff]">SYSTEM OFFLINE</h3>
+                                            <h2 className="font-mono text-lg font-bold text-center mb-6 tracking-widest text-[#fff]">SYSTEM OFFLINE</h2>
                                             <div className="glass-lite w-full max-w-2xl h-64 rounded-2xl overflow-hidden relative group">
                                                 <div className="absolute inset-0 rounded-[inherit] bg-transparent shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_0_0_1px_rgba(255,255,255,0.1)] z-10 pointer-events-none group-focus-within:bg-transparent"></div>
                                                 <iframe

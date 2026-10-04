@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Terminal } from "lucide-react";
+import { Send, Sparkles } from "lucide-react";
 import GlassSurface from "@/components/liquid/GlassSurface";
+import { profile } from "@/content/profile";
 
 /*
  * Soft scroll edges so messages dissolve into the stage instead of being cut.
@@ -18,6 +20,15 @@ type Message = {
     role: "user" | "assistant";
     content: string;
 };
+
+const GREETING = `Hi — I'm the AI version of ${profile.firstName}, answering from my portfolio data. Ask me about the AI systems I've built, how UpSound AI is engineered, my stack or availability. For anything binding, email me at ${profile.email}.`;
+
+const SUGGESTIONS = [
+    "What AI systems have you shipped to production?",
+    "How does UpSound AI survive provider outages and track AI costs?",
+    "What's your experience with agents and vector search?",
+    "Are you open to new roles, and in what format?",
+];
 
 const LINK_PATTERN = /(\[[^\]]+\]\((?:https?:\/\/[^\s)]+|\/[^\s)]*|#\/?[A-Za-z0-9_-]+)\)|https?:\/\/[^\s<]+|\/#[A-Za-z0-9_-]+|#\/?[A-Za-z0-9_-]+|\/contact|\/cv\/Sergey_Ashughyan_CV\.pdf)/g;
 
@@ -62,7 +73,7 @@ export default function ChatPage() {
         {
             id: "system-1",
             role: "assistant",
-            content: "Terminal initialized. How can I assist you today?"
+            content: GREETING
         }
     ]);
     const [input, setInput] = useState("");
@@ -135,11 +146,15 @@ export default function ChatPage() {
             document.body.classList.remove("overflow-hidden");
         };
     }, []);
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!input.trim() || isLoading) return;
+        void send(input);
+    };
 
-        const userMessage: Message = { id: Date.now().toString(), role: "user", content: input.trim() };
+    const send = async (text: string) => {
+        if (!text.trim() || isLoading) return;
+
+        const userMessage: Message = { id: Date.now().toString(), role: "user", content: text.trim() };
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
         setIsLoading(true);
@@ -173,7 +188,7 @@ export default function ChatPage() {
             } else if (typeof data === "string") {
                 textOutput = data;
             } else if (data.error) {
-                textOutput = `[System Error]: ${data.error}`;
+                textOutput = "Something went wrong. Please try again in a moment.";
             }
 
             const botMessage: Message = {
@@ -187,7 +202,7 @@ export default function ChatPage() {
             console.error("Chat error:", error);
             setMessages((prev) => [
                 ...prev,
-                { id: Date.now().toString(), role: "assistant", content: "Connection lost. Please try again." }
+                { id: Date.now().toString(), role: "assistant", content: `Connection lost. Please try again, or email me at ${profile.email}.` }
             ]);
         } finally {
             setIsLoading(false);
@@ -208,13 +223,13 @@ export default function ChatPage() {
                 <GlassSurface className="rounded-full py-2 pl-2 pr-5">
                     <div className="flex items-center gap-3 md:ml-0">
                         <div className="glass-lite p-2 rounded-full">
-                            <Terminal size={18} className="text-white/80" />
+                            <Sparkles size={18} className="text-white/80" aria-hidden="true" />
                         </div>
                         <div>
-                            <h1 className="font-mono text-sm font-bold tracking-tight text-white">n8n_Agent_Session</h1>
+                            <h1 className="text-sm font-semibold tracking-tight text-white">Ask {profile.firstName}’s AI</h1>
                             <p className="text-[10px] sm:text-xs font-mono text-white/45 flex items-center gap-2">
-                                <span className="status-dot shrink-0 w-1.5 h-1.5 rounded-full bg-green-400 text-green-400/80 shadow-[0_0_8px_rgba(74,222,128,0.85)]" />
-                                System Online
+                                <span className="status-dot shrink-0 w-1.5 h-1.5 rounded-full bg-green-400 text-green-400/80 shadow-[0_0_8px_rgba(74,222,128,0.85)]" aria-hidden="true" />
+                                Answers from my portfolio · EN / RU
                             </p>
                         </div>
                     </div>
@@ -246,10 +261,8 @@ export default function ChatPage() {
                                                 U
                                             </div>
                                         ) : (
-                                            <div className="glass-lite w-8 h-8 rounded-full overflow-hidden relative flex items-center justify-center">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-white/70">
-                                                    <path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631" />
-                                                </svg>
+                                            <div className="glass-lite w-8 h-8 rounded-full overflow-hidden relative">
+                                                <Image src={profile.photo} alt="" fill sizes="32px" className="object-cover" />
                                             </div>
                                         )}
                                     </div>
@@ -271,10 +284,8 @@ export default function ChatPage() {
                                 className="flex justify-start w-full"
                             >
                                 <div className="flex gap-3">
-                                    <div className="glass-lite w-8 h-8 rounded-full overflow-hidden shrink-0 mt-1 flex items-center justify-center">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-white/40">
-                                            <path d="M21.4737 5.6842c-1.1772 0-2.1663.8051-2.4468 1.8947h-2.8955c-1.235 0-2.289.893-2.492 2.111l-.1038.623a1.263 1.263 0 0 1-1.246 1.0555H11.289c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947s-2.1663.8051-2.4467 1.8947H4.973c-.2805-1.0896-1.2696-1.8947-2.4468-1.8947C1.1311 9.4737 0 10.6047 0 12s1.131 2.5263 2.5263 2.5263c1.1772 0 2.1663-.8051 2.4468-1.8947h1.4223c.2804 1.0896 1.2696 1.8947 2.4467 1.8947 1.1772 0 2.1663-.8051 2.4468-1.8947h1.0008a1.263 1.263 0 0 1 1.2459 1.0555l.1038.623c.203 1.218 1.257 2.111 2.492 2.111h.3692c.2804 1.0895 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263c-1.1772 0-2.1664.805-2.4468 1.8947h-.3692a1.263 1.263 0 0 1-1.246-1.0555l-.1037-.623A2.52 2.52 0 0 0 13.9607 12a2.52 2.52 0 0 0 .821-1.4794l.1038-.623a1.263 1.263 0 0 1 1.2459-1.0555h2.8955c.2805 1.0896 1.2696 1.8947 2.4468 1.8947 1.3952 0 2.5263-1.131 2.5263-2.5263s-1.131-2.5263-2.5263-2.5263m0 1.2632a1.263 1.263 0 0 1 1.2631 1.2631 1.263 1.263 0 0 1-1.2631 1.2632 1.263 1.263 0 0 1-1.2632-1.2632 1.263 1.263 0 0 1 1.2632-1.2631" />
-                                        </svg>
+                                    <div className="glass-lite w-8 h-8 rounded-full overflow-hidden shrink-0 mt-1 relative opacity-70">
+                                        <Image src={profile.photo} alt="" fill sizes="32px" className="object-cover" />
                                     </div>
                                     <div className="glass-lite px-4 py-3 sm:py-4 rounded-[22px] rounded-tl-[8px] flex items-center gap-1">
                                         <span className="w-1.5 h-1.5 rounded-full bg-white/55 animate-[bounce_1s_infinite_0ms]"></span>
@@ -285,6 +296,20 @@ export default function ChatPage() {
                             </motion.div>
                         )}
                     </AnimatePresence>
+                    {messages.length === 1 && !isLoading ? (
+                        <div className="flex flex-wrap gap-2 pl-11" aria-label="Suggested questions">
+                            {SUGGESTIONS.map((question) => (
+                                <button
+                                    key={question}
+                                    type="button"
+                                    onClick={() => void send(question)}
+                                    className="glass-lite glass-lite-hover lg-press rounded-full px-3.5 py-2 text-left text-xs leading-snug text-white/80 hover:text-white focus:outline-none focus-visible:ring-1 focus-visible:ring-white/60 sm:text-[13px]"
+                                >
+                                    {question}
+                                </button>
+                            ))}
+                        </div>
+                    ) : null}
                     <div ref={messagesEndRef} className="h-4" /> {/* Spacer */}
                 </div>
             </div>
@@ -304,7 +329,9 @@ export default function ChatPage() {
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="Initialize command..."
+                            placeholder="Ask about my projects, stack or experience…"
+                            aria-label="Your question"
+                            maxLength={2000}
                             disabled={isLoading}
                             className="w-full bg-transparent border-0 rounded-full py-4 pl-6 pr-14 text-base sm:text-sm font-sans text-white caret-white placeholder:text-white/35 focus:outline-none focus:ring-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:opacity-50 disabled:cursor-not-allowed"
                         />

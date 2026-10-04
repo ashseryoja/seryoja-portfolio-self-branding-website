@@ -6,69 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { trackGlassPointer } from "@/components/liquid/GlassSurface";
-
-const websiteProjects = [
-  {
-    id: "beze-website",
-    name: "BEZE",
-    label: "Website · 01",
-    description:
-      "A multilingual digital storefront for a Yerevan pastry studio — immersive art direction, an animated catalogue and product-led navigation.",
-    image: "/assets/beze-project.webp",
-    imageAlt: "BEZE strawberry mille-feuille collection",
-    imagePosition: "object-[center_62%]",
-    href: "https://beze-delta.vercel.app/",
-    tags: ["Multilingual", "Catalogue", "Art direction"],
-  },
-  {
-    id: "dizzit-ai-website",
-    name: "Dizzit AI",
-    label: "Independent product · 02",
-    description:
-      "My product for interior designers: one workspace for render enhancement, style transfer, new views, materials, presentations and photo-to-3D.",
-    image: "/assets/dizzit-ui-project.webp",
-    imageAlt: "Dizzit AI interior design workspace with before-and-after render editor",
-    imagePosition: "object-top",
-    href: "https://dizzit-ai.vercel.app/",
-    tags: ["AI workspace", "Interior design", "SaaS"],
-  },
-  {
-    id: "three-dimension-website",
-    name: "3Dimension",
-    label: "Website · 03",
-    description:
-      "An interactive studio website for photorealistic furniture 3D — with live material configuration, web 3D and AR-ready assets.",
-    image: "/assets/three-dimension-project.jpg",
-    imageAlt: "3Dimension furniture studio website",
-    imagePosition: "object-center",
-    href: "https://three-dimension-ten.vercel.app/",
-    tags: ["Web 3D", "Configurator", "Furniture"],
-  },
-  {
-    id: "upsound-ai-website",
-    name: "UpSound AI",
-    label: "AI product · 04",
-    description:
-      "An end-to-end AI platform for independent musicians — track analysis, cover concepts, Reels scenarios, playlist pitching and release planning.",
-    image: "/assets/upsound-ai-playlist-pitching.jpg",
-    imageAlt: "UpSound AI playlist pitching workspace",
-    imagePosition: "object-left",
-    href: "https://www.upsound.ai/",
-    tags: ["Music tech", "AI platform", "SaaS"],
-  },
-  {
-    id: "deohome-website",
-    name: "DEO HOME",
-    label: "E-commerce · 05",
-    description:
-      "A premium furniture catalogue and commerce experience built as a fast, installable PWA, optimized for tablet sales and offline browsing.",
-    image: "/assets/pwa-portfolio.webp",
-    imageAlt: "DEO HOME furniture catalogue displayed across tablet devices",
-    imagePosition: "object-center",
-    href: "https://deohome.online/",
-    tags: ["E-commerce", "PWA", "Furniture"],
-  },
-] as const;
+import { webProjects as websiteProjects } from "@/content/profile";
 
 type Project = (typeof websiteProjects)[number];
 
@@ -144,13 +82,13 @@ export default function ProjectShowcase() {
 
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-mono text-[9px] uppercase tracking-[0.22em] text-white/55">{project.label}</p>
-                  <motion.h5
+                  <motion.h3
                     layoutId={`project-title-${project.id}`}
                     transition={LIQUID_SPRING}
                     className="mt-1 w-fit max-w-full truncate text-lg font-semibold tracking-[-0.03em] text-white sm:text-2xl"
                   >
                     {project.name}
-                  </motion.h5>
+                  </motion.h3>
                 </div>
 
                 <div className="hidden shrink-0 gap-2 lg:flex">
@@ -257,14 +195,14 @@ export default function ProjectShowcase() {
                 </motion.div>
 
                 <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3.5 pb-3.5 pt-5 sm:px-5 sm:pb-5" data-lenis-prevent>
-                  <motion.h5
+                  <motion.h3
                     layoutId={`project-title-${active.id}`}
                     transition={LIQUID_SPRING}
                     id={`project-title-${active.id}`}
                     className="w-fit text-3xl font-semibold tracking-[-0.04em] text-white sm:text-4xl"
                   >
                     {active.name}
-                  </motion.h5>
+                  </motion.h3>
                   <motion.div
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0, transition: { delay: 0.16, duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
